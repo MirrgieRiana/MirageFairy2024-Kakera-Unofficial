@@ -7,10 +7,10 @@ import miragefairy2024.mod.particle.MagicSquareParticleEffect
 import mirrg.kotlin.hydrogen.max
 import net.fabricmc.fabric.api.client.particle.v1.FabricSpriteProvider
 import net.minecraft.client.Camera
+import net.minecraft.client.Minecraft
 import org.joml.Quaternionf
 import org.joml.Vector3f
 import kotlin.math.roundToInt
-import net.minecraft.client.Minecraft as MinecraftClient
 import net.minecraft.client.multiplayer.ClientLevel as ClientWorld
 import net.minecraft.client.particle.ParticleProvider as ParticleFactory
 import net.minecraft.client.particle.ParticleRenderType as ParticleTextureSheet
@@ -21,7 +21,7 @@ import net.minecraft.world.phys.Vec3 as Vec3d
 
 fun initMagicSquareParticle() {
     MagicSquareParticleChannel.registerClientPacketReceiver { packet ->
-        val particleManager = MinecraftClient.getInstance().particleEngine ?: return@registerClientPacketReceiver
+        val particleManager = Minecraft.getInstance().particleEngine ?: return@registerClientPacketReceiver
         (0..6).forEach { i ->
             particleManager.createParticle(
                 MagicSquareParticleEffect(i, packet.targetPosition, 30F * (i.toFloat() / 6F)),

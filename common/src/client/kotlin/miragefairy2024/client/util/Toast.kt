@@ -2,9 +2,9 @@ package miragefairy2024.client.util
 
 import io.wispforest.owo.ui.core.OwoUIDrawContext
 import io.wispforest.owo.ui.core.Size
+import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.components.toasts.Toast
 import io.wispforest.owo.ui.core.Component as OwoComponent
-import net.minecraft.client.Minecraft as MinecraftClient
 import net.minecraft.client.gui.GuiGraphics as DrawContext
 import net.minecraft.client.gui.components.toasts.ToastComponent as ToastManager
 
@@ -24,7 +24,7 @@ fun createOwoToast(component: OwoComponent) = object : Toast {
             this.justUpdated = false
         }
 
-        component.draw(OwoUIDrawContext.of(context), -1000, -1000, MinecraftClient.getInstance().timer.getGameTimeDeltaPartialTick(true), MinecraftClient.getInstance().timer.realtimeDeltaTicks)
+        component.draw(OwoUIDrawContext.of(context), -1000, -1000, Minecraft.getInstance().timer.getGameTimeDeltaPartialTick(true), Minecraft.getInstance().timer.realtimeDeltaTicks)
 
         return if ((startTime - this.startTime).toDouble() >= 5000.0 * manager.notificationDisplayTimeMultiplier) Toast.Visibility.HIDE else Toast.Visibility.SHOW
     }

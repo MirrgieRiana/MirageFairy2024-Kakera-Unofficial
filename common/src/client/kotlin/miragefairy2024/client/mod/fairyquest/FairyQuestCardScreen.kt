@@ -27,9 +27,9 @@ import miragefairy2024.util.invoke
 import miragefairy2024.util.isNotEmpty
 import miragefairy2024.util.orEmpty
 import miragefairy2024.util.text
+import net.minecraft.client.Minecraft
 import net.minecraft.network.chat.Component
 import net.minecraft.world.entity.player.Inventory
-import net.minecraft.client.Minecraft as MinecraftClient
 import net.minecraft.client.gui.GuiGraphics as DrawContext
 
 class FairyQuestCardScreen(handler: FairyQuestCardScreenHandler, private val playerInventory: Inventory, title: Component) : BaseOwoHandledScreen<FlowLayout, FairyQuestCardScreenHandler>(handler, playerInventory, title) {
@@ -120,7 +120,7 @@ class FairyQuestCardScreen(handler: FairyQuestCardScreenHandler, private val pla
                                         }
                                     }
                                     onDrawTooltip += { vanillaContext: DrawContext, mouseX: Int, mouseY: Int, delta: Float ->
-                                        drawGhostTooltip(OwoUIDrawContext.of(vanillaContext), mouseX, mouseY, delta, MinecraftClient.getInstance().timer.realtimeDeltaTicks)
+                                        drawGhostTooltip(OwoUIDrawContext.of(vanillaContext), mouseX, mouseY, delta, Minecraft.getInstance().timer.realtimeDeltaTicks)
                                     }
                                 })
                             }))
@@ -143,7 +143,7 @@ class FairyQuestCardScreen(handler: FairyQuestCardScreenHandler, private val pla
                                     overlayColor = 0x2000FF00
                                     onScreenUpdate += { showOverlay = outputItemStack?.invoke().orEmpty.isNotEmpty && menu.getSlot(index).item.isEmpty }
                                     onDrawTooltip += { vanillaContext: DrawContext, mouseX: Int, mouseY: Int, delta: Float ->
-                                        drawGhostTooltip(OwoUIDrawContext.of(vanillaContext), mouseX, mouseY, delta, MinecraftClient.getInstance().timer.realtimeDeltaTicks)
+                                        drawGhostTooltip(OwoUIDrawContext.of(vanillaContext), mouseX, mouseY, delta, Minecraft.getInstance().timer.realtimeDeltaTicks)
                                     }
                                 })
                             }))

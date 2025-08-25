@@ -12,7 +12,6 @@ import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.TooltipFlag
 import kotlin.jvm.optionals.getOrNull
 import com.mojang.blaze3d.platform.Lighting as DiffuseLighting
-import net.minecraft.client.Minecraft as MinecraftClient
 import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent as TooltipComponent
 
 class GhostItemComponent(var itemStacks: List<ItemStack> = listOf()) : BaseComponent() {
@@ -27,7 +26,7 @@ class GhostItemComponent(var itemStacks: List<ItemStack> = listOf()) : BaseCompo
 
         val itemStack = if (itemStacks.isNotEmpty()) itemStacks[(time / 30.0).toInt() % itemStacks.size] else EMPTY_ITEM_STACK
 
-        val notSideLit = !MinecraftClient.getInstance().itemRenderer.getModel(itemStack, null, null, 0).usesBlockLight()
+        val notSideLit = !Minecraft.getInstance().itemRenderer.getModel(itemStack, null, null, 0).usesBlockLight()
 
 
         // アイテム本体
@@ -38,7 +37,7 @@ class GhostItemComponent(var itemStacks: List<ItemStack> = listOf()) : BaseCompo
         }
 
         // 個数
-        if (showItemStack) context.renderItemDecorations(MinecraftClient.getInstance().font, itemStack, x, y)
+        if (showItemStack) context.renderItemDecorations(Minecraft.getInstance().font, itemStack, x, y)
 
         context.pose().stack {
             context.pose().translate(0F, 0F, 200F)
@@ -57,14 +56,14 @@ class GhostItemComponent(var itemStacks: List<ItemStack> = listOf()) : BaseCompo
 
         val tooltip = mutableListOf<TooltipComponent>()
 
-        val tooltipContext = if (MinecraftClient.getInstance().options.advancedItemTooltips) TooltipFlag.ADVANCED else TooltipFlag.NORMAL
-        val texts = itemStack.getTooltipLines(Item.TooltipContext.of(Minecraft.getInstance().level), MinecraftClient.getInstance().player, tooltipContext)
+        val tooltipContext = if (Minecraft.getInstance().options.advancedItemTooltips) TooltipFlag.ADVANCED else TooltipFlag.NORMAL
+        val texts = itemStack.getTooltipLines(Item.TooltipContext.of(Minecraft.getInstance().level), Minecraft.getInstance().player, tooltipContext)
         tooltip += texts.map { TooltipComponent.create(it.visualOrderText) }
 
         val data = itemStack.tooltipImage.getOrNull()
         if (data != null) tooltip.add(1, TooltipComponentCallback.EVENT.invoker().getComponent(data) ?: TooltipComponent.create(data))
 
-        context.drawTooltip(MinecraftClient.getInstance().font, mouseX, mouseY, tooltip)
+        context.drawTooltip(Minecraft.getInstance().font, mouseX, mouseY, tooltip)
         context.flush()
     }
 

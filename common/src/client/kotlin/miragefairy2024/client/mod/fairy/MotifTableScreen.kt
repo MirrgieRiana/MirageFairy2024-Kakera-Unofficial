@@ -24,7 +24,6 @@ import net.minecraft.client.Minecraft
 import net.minecraft.network.chat.Component
 import net.minecraft.world.entity.player.Inventory
 import net.minecraft.world.item.Item
-import net.minecraft.client.Minecraft as MinecraftClient
 import net.minecraft.client.gui.GuiGraphics as DrawContext
 
 class MotifTableScreen(handler: MotifTableScreenHandler, playerInventory: Inventory, title: Component) : BaseOwoHandledScreen<FlowLayout, MotifTableScreenHandler>(handler, playerInventory, title) {
@@ -56,7 +55,7 @@ class MotifTableScreen(handler: MotifTableScreenHandler, playerInventory: Invent
                                 child(Containers.horizontalFlow(Sizing.content(), Sizing.content()).apply {
                                     verticalAlignment(VerticalAlignment.CENTER)
 
-                                    tooltip(ItemComponent.tooltipFromItem(chance.showingItemStack, Item.TooltipContext.of(Minecraft.getInstance().level), MinecraftClient.getInstance().player, null))
+                                    tooltip(ItemComponent.tooltipFromItem(chance.showingItemStack, Item.TooltipContext.of(Minecraft.getInstance().level), Minecraft.getInstance().player, null))
 
                                     child(Components.item(chance.showingItemStack))
                                     child(horizontalSpace(3))

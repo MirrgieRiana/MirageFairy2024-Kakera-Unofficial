@@ -44,11 +44,11 @@ import miragefairy2024.util.style
 import miragefairy2024.util.text
 import mirrg.kotlin.hydrogen.formatAs
 import net.minecraft.ChatFormatting
+import net.minecraft.client.Minecraft
 import net.minecraft.client.renderer.RenderType
 import net.minecraft.network.chat.Component
 import net.minecraft.world.entity.player.Inventory
 import io.wispforest.owo.ui.core.Component as OwoComponent
-import net.minecraft.client.Minecraft as MinecraftClient
 
 context(ModContext)
 fun initMagicPlantClientModule() {
@@ -57,7 +57,7 @@ fun initMagicPlantClientModule() {
     RenderingEvent.RENDER_ITEM_DECORATIONS.register { graphics, font, stack, x, y, text ->
         if (stack.item !is MagicPlantSeedItem) return@register
 
-        val player = MinecraftClient.getInstance().player ?: return@register
+        val player = Minecraft.getInstance().player ?: return@register
         val otherItemStack = player.mainHandItem
         if (otherItemStack === stack) return@register
 
@@ -116,7 +116,7 @@ class TraitListScreen(handler: TraitListScreenHandler, playerInventory: Inventor
                             scrollbar(ScrollContainer.Scrollbar.flat(Color.ofArgb(0xA0FFFFFF.toInt())))
 
                             child().child(Containers.verticalFlow(Sizing.fill(100), Sizing.content()).apply {
-                                val player = MinecraftClient.getInstance().player!!
+                                val player = Minecraft.getInstance().player!!
                                 val level = player.level()
                                 val blockEntity = level.getMagicPlantBlockEntity(menu.blockPos)
 
@@ -162,7 +162,7 @@ class TraitListScreen(handler: TraitListScreenHandler, playerInventory: Inventor
                 })
                 child(verticalSpace(5))
                 child(Containers.horizontalFlow(Sizing.fill(100), Sizing.fixed(32)).apply { // 特性アイコン欄
-                    val player = MinecraftClient.getInstance().player!!
+                    val player = Minecraft.getInstance().player!!
                     val level = player.level()
                     val blockEntity = level.getMagicPlantBlockEntity(menu.blockPos)
 

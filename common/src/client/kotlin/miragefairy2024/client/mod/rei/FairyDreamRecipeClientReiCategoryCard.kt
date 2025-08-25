@@ -27,11 +27,11 @@ import miragefairy2024.util.text
 import miragefairy2024.util.toEntryIngredient
 import miragefairy2024.util.toEntryStack
 import miragefairy2024.util.toIngredient
+import net.minecraft.client.Minecraft
 import net.minecraft.network.chat.Component
 import net.minecraft.world.entity.EntityType
 import net.minecraft.world.item.Item
 import net.minecraft.world.level.block.Block
-import net.minecraft.client.Minecraft as MinecraftClient
 
 abstract class BaseFairyDreamRecipeClientReiCategoryCard<T, D : BasicDisplay>(parent: ReiCategoryCard<D>) : ClientReiCategoryCard<D>(parent)
 
@@ -50,7 +50,7 @@ object ItemFairyDreamRecipeClientReiCategoryCard : BaseFairyDreamRecipeClientRei
         override fun getDisplayHeight() = 28
         override fun setupDisplay(display: ItemFairyDreamRecipeReiCategoryCard.Display, bounds: Rectangle): List<Widget> {
             val p = bounds.location + Point(5, 5)
-            val gained = MinecraftClient.getInstance().player!!.fairyDreamContainer.getOrDefault()[display.motif]
+            val gained = Minecraft.getInstance().player!!.fairyDreamContainer.getOrDefault()[display.motif]
             val text = text { display.items[0].description }
                 .let { if (display.items.size > 1) text { it + "..."() } else it }
                 .let { if (!gained) it.darkRed else it }
@@ -85,7 +85,7 @@ object BlockFairyDreamRecipeClientReiCategoryCard : BaseFairyDreamRecipeClientRe
         override fun getDisplayHeight() = 28
         override fun setupDisplay(display: BlockFairyDreamRecipeReiCategoryCard.Display, bounds: Rectangle): List<Widget> {
             val p = bounds.location + Point(5, 5)
-            val gained = MinecraftClient.getInstance().player!!.fairyDreamContainer.getOrDefault()[display.motif]
+            val gained = Minecraft.getInstance().player!!.fairyDreamContainer.getOrDefault()[display.motif]
             val text = text { display.blocks[0].name }
                 .let { if (display.blocks.size > 1) text { it + "..."() } else it }
                 .let { if (!gained) it.darkRed else it }
@@ -120,7 +120,7 @@ object EntityTypeFairyDreamRecipeClientReiCategoryCard : BaseFairyDreamRecipeCli
         override fun getDisplayHeight() = 28
         override fun setupDisplay(display: EntityTypeFairyDreamRecipeReiCategoryCard.Display, bounds: Rectangle): List<Widget> {
             val p = bounds.location + Point(5, 5)
-            val gained = MinecraftClient.getInstance().player!!.fairyDreamContainer.getOrDefault()[display.motif]
+            val gained = Minecraft.getInstance().player!!.fairyDreamContainer.getOrDefault()[display.motif]
             val text = text { display.entityTypes[0].description }
                 .let { if (display.entityTypes.size > 1) text { it + "..."() } else it }
                 .let { if (!gained) it.darkRed else it }

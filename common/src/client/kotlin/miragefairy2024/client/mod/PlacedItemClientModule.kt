@@ -10,11 +10,11 @@ import miragefairy2024.mod.placeditem.RemovePlacedItemChannel
 import mirrg.kotlin.hydrogen.atLeast
 import mirrg.kotlin.hydrogen.atMost
 import net.minecraft.client.KeyMapping
+import net.minecraft.client.Minecraft
 import net.minecraft.core.Direction
 import net.minecraft.world.phys.BlockHitResult
 import net.minecraft.world.phys.HitResult
 import org.lwjgl.glfw.GLFW
-import net.minecraft.client.Minecraft as MinecraftClient
 import net.minecraft.util.Mth as MathHelper
 
 val placeItemKeyMappingCard = KeyMappingCard(
@@ -23,7 +23,7 @@ val placeItemKeyMappingCard = KeyMappingCard(
     KeyMapping.CATEGORY_GAMEPLAY,
 ) run@{
 
-    val player = MinecraftClient.getInstance().player ?: return@run // プレイヤーの取得に失敗した
+    val player = Minecraft.getInstance().player ?: return@run // プレイヤーの取得に失敗した
 
     if (player.isSpectator) return@run // スペクテイターモード
 

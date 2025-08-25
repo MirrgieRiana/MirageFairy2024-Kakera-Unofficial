@@ -33,11 +33,11 @@ import miragefairy2024.util.text
 import net.fabricmc.fabric.api.client.screen.v1.ScreenEvents
 import net.fabricmc.fabric.api.client.screen.v1.ScreenMouseEvents
 import net.minecraft.client.KeyMapping
+import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.components.WidgetSprites
 import net.minecraft.client.gui.screens.inventory.InventoryScreen
 import net.minecraft.network.chat.Component
 import org.lwjgl.glfw.GLFW
-import net.minecraft.client.Minecraft as MinecraftClient
 import net.minecraft.client.gui.components.ImageButton as TexturedButtonWidget
 
 val soulStreamKeyMappingCard = KeyMappingCard(
@@ -73,7 +73,7 @@ fun initFairyClientModule() {
                 child(LimitedLabelComponent(itemStack.hoverName.darkBlue).horizontalSizing(Sizing.fixed(160 - 8 - 16 - 6 - 10 - 8)).margins(Insets.of(0, 0, 4, 0)))
             })
         }
-        MinecraftClient.getInstance().toasts.addToast(createOwoToast(component))
+        Minecraft.getInstance().toasts.addToast(createOwoToast(component))
     }
 
     // ソウルストリームのキーバインド
@@ -110,7 +110,7 @@ fun initFairyClientModule() {
                     // ボタン
                     val buttonWidgetSprites = WidgetSprites(MirageFairy2024.identifier("soul_stream_button"), MirageFairy2024.identifier("soul_stream_button_highlighted"))
                     child(Components.wrapVanillaWidget(TexturedButtonWidget(0, 0, 20, 20, buttonWidgetSprites) {
-                        lastMousePositionInInventory = Pair(MinecraftClient.getInstance().mouseHandler.xpos(), MinecraftClient.getInstance().mouseHandler.ypos())
+                        lastMousePositionInInventory = Pair(Minecraft.getInstance().mouseHandler.xpos(), Minecraft.getInstance().mouseHandler.ypos())
                         screen.onClose()
                         OpenSoulStreamChannel.sendToServer(Unit)
                     }).apply {

@@ -9,17 +9,17 @@ import io.wispforest.owo.ui.core.Size
 import io.wispforest.owo.ui.core.Sizing
 import io.wispforest.owo.ui.core.VerticalAlignment
 import io.wispforest.owo.util.Observable
+import net.minecraft.client.Minecraft
 import net.minecraft.network.chat.Component
 import net.minecraft.network.chat.Style
 import java.util.function.Function
 import kotlin.math.min
-import net.minecraft.client.Minecraft as MinecraftClient
 import net.minecraft.util.FormattedCharSequence as OrderedText
 
 // ■■ from io.wispforest.owo.ui.component.LabelComponent
 // ■■ https://github.com/wisp-forest/owo-lib/blob/1.20.2/src/main/java/io/wispforest/owo/ui/component/LabelComponent.java
 open class LimitedLabelComponent(protected var text: Component) : BaseComponent() {
-    protected val textRenderer = MinecraftClient.getInstance().font
+    protected val textRenderer = Minecraft.getInstance().font
     protected var wrappedText: List<OrderedText>
     protected var verticalTextAlignment = VerticalAlignment.TOP
     protected var horizontalTextAlignment = HorizontalAlignment.LEFT
@@ -161,7 +161,7 @@ open class LimitedLabelComponent(protected var text: Component) : BaseComponent(
     override fun draw(context: OwoUIDrawContext, mouseX: Int, mouseY: Int, partialTicks: Float, delta: Float) {
         val matrices = context.pose()
         matrices.pushPose()
-        matrices.translate(0.0, 1 / MinecraftClient.getInstance().window.guiScale, 0.0)
+        matrices.translate(0.0, 1 / Minecraft.getInstance().window.guiScale, 0.0)
         var x = x
         var y = y
         if (horizontalSizing.get().isContent) {
