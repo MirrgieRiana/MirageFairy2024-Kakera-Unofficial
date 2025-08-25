@@ -26,13 +26,13 @@ import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.core.registries.Registries
 import net.minecraft.tags.BiomeTags
 import net.minecraft.util.valueproviders.IntProvider
+import net.minecraft.util.valueproviders.UniformInt
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.Items
 import net.minecraft.world.level.levelgen.GenerationStep
+import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext
+import net.minecraft.world.level.levelgen.feature.configurations.FeatureConfiguration
 import java.util.function.Predicate
-import net.minecraft.util.valueproviders.UniformInt as UniformIntProvider
-import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext as FeatureContext
-import net.minecraft.world.level.levelgen.feature.configurations.FeatureConfiguration as FeatureConfig
 
 val DEBRIS_FEATURE = DebrisFeature(DebrisFeature.Config.CODEC)
 
@@ -70,7 +70,7 @@ fun initDebrisModule() {
 
     DebrisCard.entries.forEach { card ->
         registerDynamicGeneration(card.configuredFeatureKey) {
-            DEBRIS_FEATURE with DebrisFeature.Config(UniformIntProvider.of(card.count.first, card.count.last), card.itemStackGetter())
+            DEBRIS_FEATURE with DebrisFeature.Config(UniformInt.of(card.count.first, card.count.last), card.itemStackGetter())
         }
         registerDynamicGeneration(card.placedFeatureKey) {
             val placementModifiers = placementModifiers { per(card.perChunks) + flower(square, surface) }
@@ -82,7 +82,7 @@ fun initDebrisModule() {
 }
 
 class DebrisFeature(codec: Codec<Config>) : PlacedItemFeature<DebrisFeature.Config>(codec) {
-    class Config(val count: IntProvider, val itemStack: ItemStack) : FeatureConfig {
+    class Config(val count: IntProvider, val itemStack: ItemStack) : FeatureConfiguration {
         companion object {
             val CODEC: Codec<Config> = RecordCodecBuilder.create { instance ->
                 instance.group(
@@ -93,6 +93,6 @@ class DebrisFeature(codec: Codec<Config>) : PlacedItemFeature<DebrisFeature.Conf
         }
     }
 
-    override fun getCount(context: FeatureContext<Config>) = context.config().count.sample(context.random())
-    override fun createItemStack(context: FeatureContext<Config>) = context.config().itemStack.copy()
+    override fun getCount(context: FeaturePlaceContext<Config>) = context.config().count.sample(context.random())
+    override fun createItemStack(context: FeaturePlaceContext<Config>) = context.config().itemStack.copy()
 }

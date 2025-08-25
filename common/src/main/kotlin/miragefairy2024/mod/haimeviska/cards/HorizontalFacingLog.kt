@@ -16,12 +16,12 @@ import miragefairy2024.util.registerVariantsBlockStateGeneration
 import miragefairy2024.util.times
 import miragefairy2024.util.with
 import miragefairy2024.util.withHorizontalRotation
+import net.minecraft.data.models.model.ModelTemplates
+import net.minecraft.data.models.model.TextureSlot
 import net.minecraft.tags.BlockTags
+import net.minecraft.world.level.block.HorizontalDirectionalBlock
 import net.minecraft.world.level.block.state.BlockBehaviour
 import net.minecraft.world.level.material.MapColor
-import net.minecraft.data.models.model.ModelTemplates as Models
-import net.minecraft.data.models.model.TextureSlot as TextureKey
-import net.minecraft.world.level.block.HorizontalDirectionalBlock as HorizontalFacingBlock
 
 abstract class HaimeviskaHorizontalFacingLogBlockCard(configuration: HaimeviskaBlockConfiguration) : HaimeviskaBlockCard(configuration) {
     override fun createSettings(): BlockBehaviour.Properties = createBaseWoodSetting().strength(2.0F).mapColor(MapColor.RAW_IRON)
@@ -31,12 +31,12 @@ abstract class HaimeviskaHorizontalFacingLogBlockCard(configuration: HaimeviskaB
         super.init()
 
         // レンダリング
-        block.registerVariantsBlockStateGeneration { normal("block/" * block().getIdentifier()).withHorizontalRotation(HorizontalFacingBlock.FACING) }
+        block.registerVariantsBlockStateGeneration { normal("block/" * block().getIdentifier()).withHorizontalRotation(HorizontalDirectionalBlock.FACING) }
         block.registerModelGeneration {
-            Models.CUBE_ORIENTABLE.with(
-                TextureKey.TOP to "block/" * LOG.block().getIdentifier() * "_top",
-                TextureKey.SIDE to "block/" * LOG.block().getIdentifier(),
-                TextureKey.FRONT to "block/" * it.getIdentifier(),
+            ModelTemplates.CUBE_ORIENTABLE.with(
+                TextureSlot.TOP to "block/" * LOG.block().getIdentifier() * "_top",
+                TextureSlot.SIDE to "block/" * LOG.block().getIdentifier(),
+                TextureSlot.FRONT to "block/" * it.getIdentifier(),
             )
         }
 

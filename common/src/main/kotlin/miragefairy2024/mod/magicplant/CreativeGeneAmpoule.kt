@@ -30,15 +30,15 @@ import mirrg.kotlin.hydrogen.or
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.network.chat.Component
 import net.minecraft.resources.ResourceLocation
+import net.minecraft.world.InteractionHand
 import net.minecraft.world.InteractionResult
+import net.minecraft.world.InteractionResultHolder
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.TooltipFlag
+import net.minecraft.world.item.context.UseOnContext
 import net.minecraft.world.level.Level
-import net.minecraft.world.InteractionHand as Hand
-import net.minecraft.world.InteractionResultHolder as TypedActionResult
-import net.minecraft.world.item.context.UseOnContext as ItemUsageContext
 
 val creativeGeneAmpouleItemGroupCard = ItemGroupCard(
     MirageFairy2024.identifier("creative_gene_ampoule"), "Creative Gene Ampoule", "アカーシャによる生命設計の針",
@@ -93,7 +93,7 @@ class CreativeGeneAmpouleItem(settings: Properties) : Item(settings) {
         return text { traitStack.trait.getName() + " "() + traitStack.level.toString(2)() }
     }
 
-    override fun useOn(context: ItemUsageContext): InteractionResult {
+    override fun useOn(context: UseOnContext): InteractionResult {
         val blockEntity = context.level.getMagicPlantBlockEntity(context.clickedPos) ?: return InteractionResult.PASS
         if (context.level.isClientSide) return InteractionResult.CONSUME
         val a = blockEntity.getTraitStacks() ?: TraitStacks.EMPTY
@@ -106,16 +106,16 @@ class CreativeGeneAmpouleItem(settings: Properties) : Item(settings) {
         return InteractionResult.CONSUME
     }
 
-    override fun use(world: Level, user: Player, hand: Hand): TypedActionResult<ItemStack> {
+    override fun use(world: Level, user: Player, hand: InteractionHand): InteractionResultHolder<ItemStack> {
         val itemStack = user.getItemInHand(hand)
-        if (world.isClientSide) return TypedActionResult.success(itemStack)
+        if (world.isClientSide) return InteractionResultHolder.success(itemStack)
         val traitStacks = itemStack.getTraitStacks() ?: TraitStacks.EMPTY
         if (!user.isShiftKeyDown) {
             itemStack.setTraitStacks(TraitStacks.of(traitStacks.traitStackMap.mapValues { (it.value shl 1).let { level -> if (level <= 0) 1 else level } }))
         } else {
             itemStack.setTraitStacks(TraitStacks.of(traitStacks.traitStackMap.mapValues { (it.value shr 1).let { level -> if (level <= 0) 1 else level } }))
         }
-        return TypedActionResult.consume(itemStack)
+        return InteractionResultHolder.consume(itemStack)
     }
 }
 

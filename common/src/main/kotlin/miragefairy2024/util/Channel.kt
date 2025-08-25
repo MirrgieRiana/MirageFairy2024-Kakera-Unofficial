@@ -7,10 +7,9 @@ import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.network.codec.StreamCodec
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload
 import net.minecraft.resources.ResourceLocation
+import net.minecraft.server.level.ServerLevel
 import net.minecraft.server.level.ServerPlayer
-import net.minecraft.server.level.ServerLevel as ServerWorld
-import net.minecraft.server.level.ServerPlayer as ServerPlayerEntity
-import net.minecraft.world.phys.Vec3 as Vec3d
+import net.minecraft.world.phys.Vec3
 
 abstract class Channel<P>(packetId: ResourceLocation) {
     val streamCodec = object : StreamCodec<RegistryFriendlyByteBuf, Payload<P>> {
@@ -36,18 +35,18 @@ fun <P> Channel<P>.registerServerToClientPayloadType() {
     if (Platform.getEnv() == EnvType.SERVER) NetworkManager.registerS2CPayloadType(this.type, this.streamCodec)
 }
 
-fun <P> Channel<P>.sendToClient(player: ServerPlayerEntity, packet: P) {
+fun <P> Channel<P>.sendToClient(player: ServerPlayer, packet: P) {
     NetworkManager.sendToPlayer(player, Channel.Payload(this, packet))
 }
 
-fun <P> Channel<P>.sendToAround(world: ServerWorld, pos: Vec3d, distance: Double, packet: P) {
+fun <P> Channel<P>.sendToAround(world: ServerLevel, pos: Vec3, distance: Double, packet: P) {
     val players = world.players()
         .filter { it.level().dimension() == world.dimension() }
         .filter { pos.distanceToSqr(it.position()) <= distance * distance }
     NetworkManager.sendToPlayers(players, Channel.Payload(this, packet))
 }
 
-fun <P> Channel<P>.registerServerPacketReceiver(handler: (ServerPlayerEntity, P) -> Unit) {
+fun <P> Channel<P>.registerServerPacketReceiver(handler: (ServerPlayer, P) -> Unit) {
     NetworkManager.registerReceiver(NetworkManager.Side.C2S, this.type, this.streamCodec) { buf, context ->
         handler(context.player as ServerPlayer, buf.data)
     }

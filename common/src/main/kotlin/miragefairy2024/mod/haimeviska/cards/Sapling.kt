@@ -16,6 +16,8 @@ import miragefairy2024.util.registerSingletonBlockStateGeneration
 import miragefairy2024.util.string
 import miragefairy2024.util.times
 import miragefairy2024.util.with
+import net.minecraft.data.models.model.ModelTemplates
+import net.minecraft.data.models.model.TextureSlot
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.tags.BlockTags
 import net.minecraft.tags.ItemTags
@@ -24,10 +26,8 @@ import net.minecraft.world.level.block.SoundType
 import net.minecraft.world.level.block.grower.TreeGrower
 import net.minecraft.world.level.block.state.BlockBehaviour
 import net.minecraft.world.level.material.MapColor
+import net.minecraft.world.level.material.PushReaction
 import java.util.Optional
-import net.minecraft.data.models.model.ModelTemplates as Models
-import net.minecraft.data.models.model.TextureSlot as TextureKey
-import net.minecraft.world.level.material.PushReaction as PistonBehavior
 
 class HaimeviskaSaplingBlockCard(configuration: HaimeviskaBlockConfiguration, private val treeGrowerName: ResourceLocation) : HaimeviskaBlockCard(configuration) {
     override fun createSettings(): BlockBehaviour.Properties = super.createSettings()
@@ -36,7 +36,7 @@ class HaimeviskaSaplingBlockCard(configuration: HaimeviskaBlockConfiguration, pr
         .randomTicks()
         .instabreak()
         .sound(SoundType.GRASS)
-        .pushReaction(PistonBehavior.DESTROY)
+        .pushReaction(PushReaction.DESTROY)
 
     override suspend fun createBlock(properties: BlockBehaviour.Properties) = SaplingBlock(
         TreeGrower(treeGrowerName.string, Optional.empty(), Optional.of(HAIMEVISKA_CONFIGURED_FEATURE_KEY), Optional.empty()),
@@ -50,8 +50,8 @@ class HaimeviskaSaplingBlockCard(configuration: HaimeviskaBlockConfiguration, pr
         // レンダリング
         block.registerSingletonBlockStateGeneration()
         block.registerModelGeneration {
-            Models.CROSS.with(
-                TextureKey.CROSS to "block/" * it.getIdentifier(),
+            ModelTemplates.CROSS.with(
+                TextureSlot.CROSS to "block/" * it.getIdentifier(),
             )
         }
         item.registerBlockGeneratedModelGeneration(block)

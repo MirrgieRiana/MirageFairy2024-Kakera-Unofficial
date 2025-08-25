@@ -17,8 +17,11 @@ import mirrg.kotlin.hydrogen.atMost
 import net.minecraft.advancements.AdvancementRequirements
 import net.minecraft.advancements.AdvancementRewards
 import net.minecraft.advancements.Criterion
+import net.minecraft.advancements.critereon.RecipeUnlockedTrigger
 import net.minecraft.core.HolderLookup
+import net.minecraft.core.NonNullList
 import net.minecraft.core.registries.BuiltInRegistries
+import net.minecraft.data.recipes.RecipeBuilder
 import net.minecraft.data.recipes.RecipeCategory
 import net.minecraft.data.recipes.RecipeOutput
 import net.minecraft.network.RegistryFriendlyByteBuf
@@ -33,9 +36,6 @@ import net.minecraft.world.item.crafting.RecipeInput
 import net.minecraft.world.item.crafting.RecipeSerializer
 import net.minecraft.world.item.crafting.RecipeType
 import net.minecraft.world.level.Level
-import net.minecraft.advancements.critereon.RecipeUnlockedTrigger as RecipeUnlockedCriterion
-import net.minecraft.core.NonNullList as DefaultedList
-import net.minecraft.data.recipes.RecipeBuilder as CraftingRecipeJsonBuilder
 
 abstract class SimpleMachineRecipeCard<R : SimpleMachineRecipe> {
 
@@ -88,8 +88,8 @@ open class SimpleMachineRecipe(
 
     open fun getCustomizedRemainder(itemStack: ItemStack): ItemStack = itemStack.item.getRecipeRemainder(itemStack)
 
-    override fun getRemainingItems(inventory: SimpleMachineRecipeInput): DefaultedList<ItemStack> {
-        val list = DefaultedList.create<ItemStack>()
+    override fun getRemainingItems(inventory: SimpleMachineRecipeInput): NonNullList<ItemStack> {
+        val list = NonNullList.create<ItemStack>()
         inputs.forEachIndexed { index, input ->
             val remainder = getCustomizedRemainder(inventory.getItem(index))
             if (remainder.isEmpty) return@forEachIndexed
@@ -180,7 +180,7 @@ class SimpleMachineRecipeJsonBuilder<R : SimpleMachineRecipe>(
     private val inputs: List<Pair<Ingredient, Int>>,
     private val output: ItemStack,
     private val duration: Int,
-) : CraftingRecipeJsonBuilder {
+) : RecipeBuilder {
     private val criteria = mutableMapOf<String, Criterion<*>>()
     private var group = ""
 
@@ -191,7 +191,7 @@ class SimpleMachineRecipeJsonBuilder<R : SimpleMachineRecipe>(
     override fun save(recipeOutput: RecipeOutput, recipeId: ResourceLocation) {
         check(criteria.isNotEmpty()) { "No way of obtaining recipe $recipeId" }
         val advancementBuilder = recipeOutput.advancement()
-            .addCriterion("has_the_recipe", RecipeUnlockedCriterion.unlocked(recipeId))
+            .addCriterion("has_the_recipe", RecipeUnlockedTrigger.unlocked(recipeId))
             .rewards(AdvancementRewards.Builder.recipe(recipeId))
             .requirements(AdvancementRequirements.Strategy.OR)
         criteria.forEach {

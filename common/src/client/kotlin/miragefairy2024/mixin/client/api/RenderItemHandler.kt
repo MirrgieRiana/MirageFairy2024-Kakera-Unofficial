@@ -1,10 +1,10 @@
 package miragefairy2024.mixin.client.api
 
+import com.mojang.blaze3d.vertex.PoseStack
+import net.minecraft.client.renderer.MultiBufferSource
 import net.minecraft.client.resources.model.BakedModel
+import net.minecraft.world.item.ItemDisplayContext
 import net.minecraft.world.item.ItemStack
-import com.mojang.blaze3d.vertex.PoseStack as MatrixStack
-import net.minecraft.client.renderer.MultiBufferSource as VertexConsumerProvider
-import net.minecraft.world.item.ItemDisplayContext as ModelTransformationMode
 
 fun interface RenderItemHandler {
     companion object {
@@ -16,5 +16,5 @@ fun interface RenderItemHandler {
         val listeners = mutableListOf<RenderItemHandler>()
     }
 
-    fun renderItem(stack: ItemStack, renderMode: ModelTransformationMode, leftHanded: Boolean, matrices: MatrixStack, vertexConsumers: VertexConsumerProvider, light: Int, overlay: Int, model: BakedModel)
+    fun renderItem(stack: ItemStack, renderMode: ItemDisplayContext, leftHanded: Boolean, matrices: PoseStack, vertexConsumers: MultiBufferSource, light: Int, overlay: Int, model: BakedModel)
 }

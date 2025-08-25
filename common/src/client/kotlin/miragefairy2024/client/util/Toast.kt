@@ -1,14 +1,14 @@
 package miragefairy2024.client.util
 
+import io.wispforest.owo.ui.core.Component
 import io.wispforest.owo.ui.core.OwoUIDrawContext
 import io.wispforest.owo.ui.core.Size
 import net.minecraft.client.Minecraft
+import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.gui.components.toasts.Toast
-import io.wispforest.owo.ui.core.Component as OwoComponent
-import net.minecraft.client.gui.GuiGraphics as DrawContext
-import net.minecraft.client.gui.components.toasts.ToastComponent as ToastManager
+import net.minecraft.client.gui.components.toasts.ToastComponent
 
-fun createOwoToast(component: OwoComponent) = object : Toast {
+fun createOwoToast(component: Component) = object : Toast {
 
     init {
         component.inflate(Size.of(1000, 1000))
@@ -18,7 +18,7 @@ fun createOwoToast(component: OwoComponent) = object : Toast {
     private var startTime: Long = 0
     private var justUpdated = false
 
-    override fun render(context: DrawContext, manager: ToastManager, startTime: Long): Toast.Visibility {
+    override fun render(context: GuiGraphics, manager: ToastComponent, startTime: Long): Toast.Visibility {
         if (this.justUpdated) {
             this.startTime = startTime
             this.justUpdated = false

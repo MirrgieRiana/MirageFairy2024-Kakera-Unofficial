@@ -1,17 +1,17 @@
 package miragefairy2024.util
 
 import net.minecraft.nbt.CompoundTag
-import net.minecraft.nbt.ListTag as NbtList
-import net.minecraft.nbt.StringTag as NbtString
-import net.minecraft.nbt.Tag as NbtElement
+import net.minecraft.nbt.ListTag
+import net.minecraft.nbt.StringTag
+import net.minecraft.nbt.Tag
 
-fun Collection<NbtElement>.toNbtList(): NbtList {
-    val nbtList = NbtList()
+fun Collection<Tag>.toNbtList(): ListTag {
+    val nbtList = ListTag()
     nbtList.addAll(this)
     return nbtList
 }
 
-fun Iterable<Pair<String, NbtElement>>.toCompoundTag(): CompoundTag {
+fun Iterable<Pair<String, Tag>>.toCompoundTag(): CompoundTag {
     val CompoundTag = CompoundTag()
     this.forEach {
         CompoundTag.put(it.first, it.second)
@@ -19,7 +19,7 @@ fun Iterable<Pair<String, NbtElement>>.toCompoundTag(): CompoundTag {
     return CompoundTag
 }
 
-fun NbtList(vararg elements: NbtElement) = elements.toList().toNbtList()
-fun CompoundTag(vararg entries: Pair<String, NbtElement>) = entries.toList().toCompoundTag()
+fun NbtList(vararg elements: Tag) = elements.toList().toNbtList()
+fun CompoundTag(vararg entries: Pair<String, Tag>) = entries.toList().toCompoundTag()
 
-fun String.toNbtString(): NbtString = NbtString.valueOf(this)
+fun String.toNbtString(): StringTag = StringTag.valueOf(this)

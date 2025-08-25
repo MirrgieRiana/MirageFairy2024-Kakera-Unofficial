@@ -4,18 +4,18 @@ import com.mojang.serialization.Codec
 import miragefairy2024.mod.placeditem.PlacedItemBlockEntity
 import miragefairy2024.mod.placeditem.PlacedItemCard
 import net.minecraft.core.BlockPos
+import net.minecraft.util.Mth
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.levelgen.Heightmap
 import net.minecraft.world.level.levelgen.feature.Feature
-import net.minecraft.util.Mth as MathHelper
-import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext as FeatureContext
-import net.minecraft.world.level.levelgen.feature.configurations.FeatureConfiguration as FeatureConfig
+import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext
+import net.minecraft.world.level.levelgen.feature.configurations.FeatureConfiguration
 
-abstract class PlacedItemFeature<C : FeatureConfig>(codec: Codec<C>) : Feature<C>(codec) {
-    abstract fun getCount(context: FeatureContext<C>): Int
-    abstract fun createItemStack(context: FeatureContext<C>): ItemStack?
-    override fun place(context: FeatureContext<C>): Boolean {
+abstract class PlacedItemFeature<C : FeatureConfiguration>(codec: Codec<C>) : Feature<C>(codec) {
+    abstract fun getCount(context: FeaturePlaceContext<C>): Int
+    abstract fun createItemStack(context: FeaturePlaceContext<C>): ItemStack?
+    override fun place(context: FeaturePlaceContext<C>): Boolean {
         val random = context.random()
         val world = context.level()
 
@@ -47,7 +47,7 @@ abstract class PlacedItemFeature<C : FeatureConfig>(codec: Codec<C>) : Feature<C
             blockEntity.itemX = (4.0 + 8.0 * random.nextDouble()) / 16.0
             blockEntity.itemY = 0.5 / 16.0
             blockEntity.itemZ = (4.0 + 8.0 * random.nextDouble()) / 16.0
-            blockEntity.itemRotateY = MathHelper.TWO_PI * random.nextDouble()
+            blockEntity.itemRotateY = Mth.TWO_PI * random.nextDouble()
             blockEntity.updateShapeCache()
             blockEntity.setChanged()
 

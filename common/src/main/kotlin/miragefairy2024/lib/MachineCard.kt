@@ -12,15 +12,15 @@ import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.resources.ResourceLocation
+import net.minecraft.world.SimpleContainer
+import net.minecraft.world.inventory.ContainerLevelAccess
+import net.minecraft.world.inventory.SimpleContainerData
 import net.minecraft.world.item.BlockItem
 import net.minecraft.world.item.Item
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.entity.BlockEntity
 import net.minecraft.world.level.block.entity.BlockEntityType
 import net.minecraft.world.level.block.state.BlockState
-import net.minecraft.world.SimpleContainer as SimpleInventory
-import net.minecraft.world.inventory.ContainerLevelAccess as ScreenHandlerContext
-import net.minecraft.world.inventory.SimpleContainerData as ArrayPropertyDelegate
 
 @Suppress("LeakingThis") // ブートストラップ問題のため解決不可能なので妥協する
 abstract class MachineCard<B : Block, E : MachineBlockEntity<E>, H : MachineScreenHandler> {
@@ -90,9 +90,9 @@ abstract class MachineCard<B : Block, E : MachineBlockEntity<E>, H : MachineScre
             val arguments = MachineScreenHandler.Arguments(
                 syncId,
                 playerInventory,
-                SimpleInventory(inventorySlotConfigurations.size),
-                ArrayPropertyDelegate(propertyConfigurations.size),
-                ScreenHandlerContext.NULL,
+                SimpleContainer(inventorySlotConfigurations.size),
+                SimpleContainerData(propertyConfigurations.size),
+                ContainerLevelAccess.NULL,
             )
             createScreenHandler(arguments)
         }, dummyUnitStreamCodec())

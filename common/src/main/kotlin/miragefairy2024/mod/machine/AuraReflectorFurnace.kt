@@ -36,6 +36,7 @@ import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
 import net.minecraft.core.HolderLookup
 import net.minecraft.core.registries.BuiltInRegistries
+import net.minecraft.data.models.model.TextureSlot
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.tags.BlockTags
 import net.minecraft.world.item.ItemStack
@@ -43,13 +44,12 @@ import net.minecraft.world.item.Items
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.Blocks
+import net.minecraft.world.level.block.HorizontalDirectionalBlock
 import net.minecraft.world.level.block.state.BlockState
+import net.minecraft.world.level.block.state.StateDefinition
 import net.minecraft.world.level.block.state.properties.BlockStateProperties
 import net.minecraft.world.level.block.state.properties.BooleanProperty
 import net.minecraft.world.level.material.MapColor
-import net.minecraft.data.models.model.TextureSlot as TextureKey
-import net.minecraft.world.level.block.HorizontalDirectionalBlock as HorizontalFacingBlock
-import net.minecraft.world.level.block.state.StateDefinition as StateManager
 
 object AuraReflectorFurnaceCard : SimpleMachineCard<AuraReflectorFurnaceBlock, AuraReflectorFurnaceBlockEntity, AuraReflectorFurnaceScreenHandler, AuraReflectorFurnaceRecipe>() {
     override fun createIdentifier() = MirageFairy2024.identifier("aura_reflector_furnace")
@@ -99,7 +99,7 @@ object AuraReflectorFurnaceCard : SimpleMachineCard<AuraReflectorFurnaceBlock, A
 
         Registration(BuiltInRegistries.BLOCK_TYPE, MirageFairy2024.identifier("aura_reflector_furnace")) { AuraReflectorFurnaceBlock.CODEC }.register()
 
-        registerModelGeneration({ "block/" * identifier * "_lit" }) { Model("block/" * identifier, TextureKey.FRONT) with TextureMap(TextureKey.FRONT to "block/" * identifier * "_front_lit") }
+        registerModelGeneration({ "block/" * identifier * "_lit" }) { Model("block/" * identifier, TextureSlot.FRONT) with TextureMap(TextureSlot.FRONT to "block/" * identifier * "_front_lit") }
 
         BlockTags.MINEABLE_WITH_PICKAXE.generator.registerChild(block)
 
@@ -116,7 +116,7 @@ object AuraReflectorFurnaceCard : SimpleMachineCard<AuraReflectorFurnaceBlock, A
     override fun registerBlockStateGeneration() {
         block.registerVariantsBlockStateGeneration {
             normal("block/" * block().getIdentifier())
-                .withHorizontalRotation(HorizontalFacingBlock.FACING)
+                .withHorizontalRotation(HorizontalDirectionalBlock.FACING)
                 .with(AuraReflectorFurnaceBlock.LIT) { model, entry -> if (entry.value) model * "_lit" else model }
         }
     }
@@ -134,7 +134,7 @@ class AuraReflectorFurnaceBlock(card: AuraReflectorFurnaceCard) : SimpleMachineB
 
     override fun codec() = CODEC
 
-    override fun createBlockStateDefinition(builder: StateManager.Builder<Block, BlockState>) {
+    override fun createBlockStateDefinition(builder: StateDefinition.Builder<Block, BlockState>) {
         super.createBlockStateDefinition(builder)
         builder.add(LIT)
     }

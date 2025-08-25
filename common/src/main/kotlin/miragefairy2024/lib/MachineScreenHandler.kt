@@ -5,20 +5,20 @@ import net.minecraft.network.chat.Component
 import net.minecraft.world.Container
 import net.minecraft.world.entity.player.Inventory
 import net.minecraft.world.entity.player.Player
+import net.minecraft.world.inventory.AbstractContainerMenu
+import net.minecraft.world.inventory.ContainerData
+import net.minecraft.world.inventory.ContainerLevelAccess
 import net.minecraft.world.inventory.Slot
 import net.minecraft.world.item.ItemStack
-import net.minecraft.world.inventory.AbstractContainerMenu as ScreenHandler
-import net.minecraft.world.inventory.ContainerData as PropertyDelegate
-import net.minecraft.world.inventory.ContainerLevelAccess as ScreenHandlerContext
 
-open class MachineScreenHandler(private val card: MachineCard<*, *, *>, private val arguments: Arguments) : ScreenHandler(card.screenHandlerType(), arguments.syncId) {
+open class MachineScreenHandler(private val card: MachineCard<*, *, *>, private val arguments: Arguments) : AbstractContainerMenu(card.screenHandlerType(), arguments.syncId) {
 
     class Arguments(
         val syncId: Int,
         val playerInventory: Inventory,
         val inventory: Container,
-        val propertyDelegate: PropertyDelegate,
-        val context: ScreenHandlerContext,
+        val propertyDelegate: ContainerData,
+        val context: ContainerLevelAccess,
     )
 
     interface GuiSlotConfiguration {
