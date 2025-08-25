@@ -39,43 +39,43 @@ import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.core.registries.Registries
 import net.minecraft.resources.ResourceKey
 import net.minecraft.resources.ResourceLocation
+import net.minecraft.server.level.ServerLevel
 import net.minecraft.sounds.SoundSource
 import net.minecraft.tags.EntityTypeTags
+import net.minecraft.util.Mth
 import net.minecraft.world.damagesource.DamageSource
 import net.minecraft.world.entity.EntityDimensions
 import net.minecraft.world.entity.EntityType
 import net.minecraft.world.entity.LivingEntity
+import net.minecraft.world.entity.Mob
+import net.minecraft.world.entity.MobCategory
 import net.minecraft.world.entity.SpawnPlacementTypes
+import net.minecraft.world.entity.SpawnPlacements
+import net.minecraft.world.entity.ai.attributes.Attributes
 import net.minecraft.world.entity.ai.goal.Goal
+import net.minecraft.world.entity.ai.goal.MoveTowardsRestrictionGoal
+import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal
+import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal
+import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal
+import net.minecraft.world.entity.monster.Monster
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.SpawnEggItem
 import net.minecraft.world.level.Level
+import net.minecraft.world.level.biome.Biomes
 import net.minecraft.world.level.levelgen.Heightmap
 import net.minecraft.world.level.storage.loot.functions.EnchantedCountIncreaseFunction
+import net.minecraft.world.level.storage.loot.functions.SetItemCountFunction
+import net.minecraft.world.level.storage.loot.predicates.LootItemKilledByPlayerCondition
 import net.minecraft.world.level.storage.loot.predicates.LootItemRandomChanceWithEnchantedBonusCondition
+import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator
+import net.minecraft.world.phys.Vec3
 import org.joml.Quaternionf
 import java.util.EnumSet
 import kotlin.math.sqrt
-import net.minecraft.server.level.ServerLevel as ServerWorld
-import net.minecraft.util.Mth as MathHelper
-import net.minecraft.world.entity.Mob as MobEntity
-import net.minecraft.world.entity.MobCategory as SpawnGroup
-import net.minecraft.world.entity.SpawnPlacements as SpawnRestriction
-import net.minecraft.world.entity.ai.attributes.Attributes as EntityAttributes
-import net.minecraft.world.entity.ai.goal.MoveTowardsRestrictionGoal as GoToWalkTargetGoal
-import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal as WanderAroundFarGoal
-import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal as RevengeGoal
-import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal as ActiveTargetGoal
-import net.minecraft.world.entity.monster.Monster as HostileEntity
-import net.minecraft.world.level.biome.Biomes as BiomeKeys
-import net.minecraft.world.level.storage.loot.functions.SetItemCountFunction as SetCountLootFunction
-import net.minecraft.world.level.storage.loot.predicates.LootItemKilledByPlayerCondition as KilledByPlayerLootCondition
-import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator as UniformLootNumberProvider
-import net.minecraft.world.phys.Vec3 as Vec3d
 
 object ChaosCubeCard {
-    val spawnGroup = SpawnGroup.MONSTER
+    val spawnGroup = MobCategory.MONSTER
     val width = 0.8F
     val height = 1.5F
     fun createEntity(entityType: EntityType<ChaosCubeEntity>, world: Level) = ChaosCubeEntity(entityType, world)
@@ -102,13 +102,13 @@ object ChaosCubeCard {
     fun init() {
         entityType.register()
         ModEvents.onInitialize {
-            val attributes = HostileEntity.createMonsterAttributes()
-                .add(EntityAttributes.MAX_HEALTH, 100.0)
-                .add(EntityAttributes.KNOCKBACK_RESISTANCE, 0.4)
-                .add(EntityAttributes.ARMOR, 12.0)
-                .add(EntityAttributes.ATTACK_DAMAGE, 20.0)
-                .add(EntityAttributes.MOVEMENT_SPEED, 0.1)
-                .add(EntityAttributes.FOLLOW_RANGE, 48.0)
+            val attributes = Monster.createMonsterAttributes()
+                .add(Attributes.MAX_HEALTH, 100.0)
+                .add(Attributes.KNOCKBACK_RESISTANCE, 0.4)
+                .add(Attributes.ARMOR, 12.0)
+                .add(Attributes.ATTACK_DAMAGE, 20.0)
+                .add(Attributes.MOVEMENT_SPEED, 0.1)
+                .add(Attributes.FOLLOW_RANGE, 48.0)
             FabricDefaultAttributeRegistry.register(entityType(), attributes)
         }
         entityType.enJa(name)
@@ -116,23 +116,23 @@ object ChaosCubeCard {
         entityType.registerLootTableGeneration { registries ->
             LootTable(
                 LootPool(ItemLootPoolEntry(MaterialCard.MIRAGIDIAN_SHARD.item())).configure {
-                    apply(SetCountLootFunction.setCount(UniformLootNumberProvider.between(0.0F, 2.0F)))
-                    apply(EnchantedCountIncreaseFunction.lootingMultiplier(registries, UniformLootNumberProvider.between(0.0F, 1.0F)))
+                    apply(SetItemCountFunction.setCount(UniformGenerator.between(0.0F, 2.0F)))
+                    apply(EnchantedCountIncreaseFunction.lootingMultiplier(registries, UniformGenerator.between(0.0F, 1.0F)))
                 },
                 LootPool(ItemLootPoolEntry(MaterialCard.MIRAGIDIAN.item())).configure {
-                    `when`(KilledByPlayerLootCondition.killedByPlayer())
+                    `when`(LootItemKilledByPlayerCondition.killedByPlayer())
                     `when`(LootItemRandomChanceWithEnchantedBonusCondition.randomChanceAndLootingBoost(registries, 0.05F, 0.02F))
                 },
                 LootPool(ItemLootPoolEntry(MaterialCard.CHAOS_STONE.item())).configure {
-                    `when`(KilledByPlayerLootCondition.killedByPlayer())
+                    `when`(LootItemKilledByPlayerCondition.killedByPlayer())
                     `when`(LootItemRandomChanceWithEnchantedBonusCondition.randomChanceAndLootingBoost(registries, 0.3F, 0.1F))
                 },
             )
         }
 
-        entityType.registerSpawn(SpawnGroup.MONSTER, 2, 2, 4) { +BiomeKeys.DRIPSTONE_CAVES }
+        entityType.registerSpawn(MobCategory.MONSTER, 2, 2, 4) { +Biomes.DRIPSTONE_CAVES }
         ModEvents.onInitialize {
-            SpawnRestriction.register(entityType(), SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, HostileEntity::checkMonsterSpawnRules)
+            SpawnPlacements.register(entityType(), SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, Monster::checkMonsterSpawnRules)
         }
 
         spawnEggItem.register()
@@ -144,7 +144,7 @@ object ChaosCubeCard {
     }
 }
 
-class ChaosCubeEntity(entityType: EntityType<out ChaosCubeEntity>, world: Level) : HostileEntity(entityType, world) {
+class ChaosCubeEntity(entityType: EntityType<out ChaosCubeEntity>, world: Level) : Monster(entityType, world) {
 
     class Segment(val partIndex: Int) {
         val prevRotation = Quaternionf()
@@ -173,42 +173,42 @@ class ChaosCubeEntity(entityType: EntityType<out ChaosCubeEntity>, world: Level)
             // 0246 1357  0264 1375  0264 5731
 
             repeat(duration) {
-                segments[0].rotation.rotateLocalX(90F / duration / 180F * MathHelper.PI)
-                segments[1].rotation.rotateLocalX(90F / duration / 180F * MathHelper.PI)
-                segments[2].rotation.rotateLocalX(90F / duration / 180F * MathHelper.PI)
-                segments[3].rotation.rotateLocalX(90F / duration / 180F * MathHelper.PI)
-                segments[4].rotation.rotateLocalX(-90F / duration / 180F * MathHelper.PI)
-                segments[5].rotation.rotateLocalX(-90F / duration / 180F * MathHelper.PI)
-                segments[6].rotation.rotateLocalX(-90F / duration / 180F * MathHelper.PI)
-                segments[7].rotation.rotateLocalX(-90F / duration / 180F * MathHelper.PI)
+                segments[0].rotation.rotateLocalX(90F / duration / 180F * Mth.PI)
+                segments[1].rotation.rotateLocalX(90F / duration / 180F * Mth.PI)
+                segments[2].rotation.rotateLocalX(90F / duration / 180F * Mth.PI)
+                segments[3].rotation.rotateLocalX(90F / duration / 180F * Mth.PI)
+                segments[4].rotation.rotateLocalX(-90F / duration / 180F * Mth.PI)
+                segments[5].rotation.rotateLocalX(-90F / duration / 180F * Mth.PI)
+                segments[6].rotation.rotateLocalX(-90F / duration / 180F * Mth.PI)
+                segments[7].rotation.rotateLocalX(-90F / duration / 180F * Mth.PI)
                 yield(Unit)
             }
             swap(0, 1, 3, 2)
             swap(6, 7, 5, 4)
 
             repeat(duration) {
-                segments[0].rotation.rotateLocalY(90F / duration / 180F * MathHelper.PI)
-                segments[1].rotation.rotateLocalY(90F / duration / 180F * MathHelper.PI)
-                segments[2].rotation.rotateLocalY(-90F / duration / 180F * MathHelper.PI)
-                segments[3].rotation.rotateLocalY(-90F / duration / 180F * MathHelper.PI)
-                segments[4].rotation.rotateLocalY(90F / duration / 180F * MathHelper.PI)
-                segments[5].rotation.rotateLocalY(90F / duration / 180F * MathHelper.PI)
-                segments[6].rotation.rotateLocalY(-90F / duration / 180F * MathHelper.PI)
-                segments[7].rotation.rotateLocalY(-90F / duration / 180F * MathHelper.PI)
+                segments[0].rotation.rotateLocalY(90F / duration / 180F * Mth.PI)
+                segments[1].rotation.rotateLocalY(90F / duration / 180F * Mth.PI)
+                segments[2].rotation.rotateLocalY(-90F / duration / 180F * Mth.PI)
+                segments[3].rotation.rotateLocalY(-90F / duration / 180F * Mth.PI)
+                segments[4].rotation.rotateLocalY(90F / duration / 180F * Mth.PI)
+                segments[5].rotation.rotateLocalY(90F / duration / 180F * Mth.PI)
+                segments[6].rotation.rotateLocalY(-90F / duration / 180F * Mth.PI)
+                segments[7].rotation.rotateLocalY(-90F / duration / 180F * Mth.PI)
                 yield(Unit)
             }
             swap(0, 1, 5, 4)
             swap(6, 7, 3, 2)
 
             repeat(duration) {
-                segments[0].rotation.rotateLocalZ(90F / duration / 180F * MathHelper.PI)
-                segments[1].rotation.rotateLocalZ(-90F / duration / 180F * MathHelper.PI)
-                segments[2].rotation.rotateLocalZ(90F / duration / 180F * MathHelper.PI)
-                segments[3].rotation.rotateLocalZ(-90F / duration / 180F * MathHelper.PI)
-                segments[4].rotation.rotateLocalZ(90F / duration / 180F * MathHelper.PI)
-                segments[5].rotation.rotateLocalZ(-90F / duration / 180F * MathHelper.PI)
-                segments[6].rotation.rotateLocalZ(90F / duration / 180F * MathHelper.PI)
-                segments[7].rotation.rotateLocalZ(-90F / duration / 180F * MathHelper.PI)
+                segments[0].rotation.rotateLocalZ(90F / duration / 180F * Mth.PI)
+                segments[1].rotation.rotateLocalZ(-90F / duration / 180F * Mth.PI)
+                segments[2].rotation.rotateLocalZ(90F / duration / 180F * Mth.PI)
+                segments[3].rotation.rotateLocalZ(-90F / duration / 180F * Mth.PI)
+                segments[4].rotation.rotateLocalZ(90F / duration / 180F * Mth.PI)
+                segments[5].rotation.rotateLocalZ(-90F / duration / 180F * Mth.PI)
+                segments[6].rotation.rotateLocalZ(90F / duration / 180F * Mth.PI)
+                segments[7].rotation.rotateLocalZ(-90F / duration / 180F * Mth.PI)
                 yield(Unit)
             }
             swap(0, 2, 6, 4)
@@ -225,9 +225,9 @@ class ChaosCubeEntity(entityType: EntityType<out ChaosCubeEntity>, world: Level)
 
     override fun registerGoals() {
         goalSelector.addGoal(4, ShootGoal(this))
-        goalSelector.addGoal(5, GoToWalkTargetGoal(this, 1.0))
-        goalSelector.addGoal(7, WanderAroundFarGoal(this, 0.5, 0.0F))
-        targetSelector.addGoal(1, RevengeGoal(this, ChaosCubeEntity::class.java).setAlertOthers())
+        goalSelector.addGoal(5, MoveTowardsRestrictionGoal(this, 1.0))
+        goalSelector.addGoal(7, WaterAvoidingRandomStrollGoal(this, 0.5, 0.0F))
+        targetSelector.addGoal(1, HurtByTargetGoal(this, ChaosCubeEntity::class.java).setAlertOthers())
         targetSelector.addGoal(2, TargetGoal(this, Player::class.java))
     }
 
@@ -329,13 +329,13 @@ class ChaosCubeEntity(entityType: EntityType<out ChaosCubeEntity>, world: Level)
                             (entity.random.nextFloat() - entity.random.nextFloat()) * 0.2F + 1.0F,
                             false,
                         )
-                        SoundEventChannel.sendToAround(entity.level() as ServerWorld, entity.eyePosition, 64.0, soundEventPacket)
+                        SoundEventChannel.sendToAround(entity.level() as ServerLevel, entity.eyePosition, 64.0, soundEventPacket)
                     }
                     val particlePacket = MagicSquareParticlePacket(
-                        Vec3d(shootingX, shootingY, shootingZ),
-                        Vec3d(target.x, target.getY(0.5), target.z),
+                        Vec3(shootingX, shootingY, shootingZ),
+                        Vec3(target.x, target.getY(0.5), target.z),
                     )
-                    MagicSquareParticleChannel.sendToAround(entity.level() as ServerWorld, entity.position(), 64.0, particlePacket)
+                    MagicSquareParticleChannel.sendToAround(entity.level() as ServerLevel, entity.position(), 64.0, particlePacket)
 
 
                     repeat(40) {
@@ -388,7 +388,7 @@ class ChaosCubeEntity(entityType: EntityType<out ChaosCubeEntity>, world: Level)
                                 (entity.random.nextFloat() - entity.random.nextFloat()) * 0.2F + 1.0F,
                                 false,
                             )
-                            SoundEventChannel.sendToAround(entity.level() as ServerWorld, entity.eyePosition, 64.0, soundEventPacket)
+                            SoundEventChannel.sendToAround(entity.level() as ServerLevel, entity.eyePosition, 64.0, soundEventPacket)
                         }
 
 
@@ -439,11 +439,11 @@ class ChaosCubeEntity(entityType: EntityType<out ChaosCubeEntity>, world: Level)
 
     }
 
-    private class TargetGoal<T : LivingEntity>(mob: MobEntity, targetClass: Class<T>) : ActiveTargetGoal<T>(mob, targetClass, true) {
+    private class TargetGoal<T : LivingEntity>(mob: Mob, targetClass: Class<T>) : NearestAttackableTargetGoal<T>(mob, targetClass, true) {
         override fun canUse(): Boolean {
             val world = mob.level()
             if (world.gameTime % 20L != 0L) return false
-            if (world !is ServerWorld) return false
+            if (world !is ServerLevel) return false
             val structure = world.structureManager().registryAccess().registryOrThrow(Registries.STRUCTURE).get(ResourceKey.create(Registries.STRUCTURE, MirageFairy2024.identifier("dripstone_caves_ruin"))) // TODO
             if (!world.structureManager().getStructureAt(mob.blockPosition(), structure).isValid) return false
             return super.canUse()

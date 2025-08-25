@@ -28,22 +28,22 @@ import net.fabricmc.fabric.api.datagen.v1.provider.SimpleFabricLootTableProvider
 import net.minecraft.advancements.AdvancementHolder
 import net.minecraft.core.HolderLookup
 import net.minecraft.core.Registry
+import net.minecraft.core.RegistrySetBuilder
+import net.minecraft.data.CachedOutput
 import net.minecraft.data.DataProvider
+import net.minecraft.data.PackOutput
 import net.minecraft.data.advancements.AdvancementProvider
 import net.minecraft.data.advancements.AdvancementSubProvider
+import net.minecraft.data.models.BlockModelGenerators
+import net.minecraft.data.models.ItemModelGenerators
 import net.minecraft.data.recipes.RecipeOutput
 import net.minecraft.resources.ResourceKey
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.level.storage.loot.LootTable
+import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets
 import java.util.concurrent.CompletableFuture
 import java.util.function.BiConsumer
 import java.util.function.Consumer
-import net.minecraft.core.RegistrySetBuilder as RegistryBuilder
-import net.minecraft.data.CachedOutput as DataWriter
-import net.minecraft.data.PackOutput as DataOutput
-import net.minecraft.data.models.BlockModelGenerators as BlockStateModelGenerator
-import net.minecraft.data.models.ItemModelGenerators as ItemModelGenerator
-import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets as LootContextTypes
 
 object MirageFairy2024FabricDataGenerator : DataGeneratorEntrypoint {
     override fun onInitializeDataGenerator(fabricDataGenerator: FabricDataGenerator) {
@@ -65,8 +65,8 @@ object MirageFairy2024FabricDataGenerator : DataGeneratorEntrypoint {
     private fun common(pack: FabricDataGenerator.Pack) {
         pack.addProvider { output: FabricDataOutput ->
             object : FabricModelProvider(output) {
-                override fun generateBlockStateModels(blockStateModelGenerator: BlockStateModelGenerator) = DataGenerationEvents.onGenerateBlockModel.fire { it(blockStateModelGenerator) }
-                override fun generateItemModels(itemModelGenerator: ItemModelGenerator) = DataGenerationEvents.onGenerateItemModel.fire { it(itemModelGenerator) }
+                override fun generateBlockStateModels(blockStateModelGenerator: BlockModelGenerators) = DataGenerationEvents.onGenerateBlockModel.fire { it(blockStateModelGenerator) }
+                override fun generateItemModels(itemModelGenerator: ItemModelGenerators) = DataGenerationEvents.onGenerateItemModel.fire { it(itemModelGenerator) }
             }
         }
         TagGenerator.entries.forEach {
@@ -84,7 +84,7 @@ object MirageFairy2024FabricDataGenerator : DataGeneratorEntrypoint {
         }
         pack.addProvider { output: FabricDataOutput, registriesFuture: CompletableFuture<HolderLookup.Provider> ->
             val registries = registriesFuture.join()
-            object : SimpleFabricLootTableProvider(output, registriesFuture, LootContextTypes.CHEST) {
+            object : SimpleFabricLootTableProvider(output, registriesFuture, LootContextParamSets.CHEST) {
                 override fun generate(exporter: BiConsumer<ResourceKey<LootTable>, LootTable.Builder>) {
                     DataGenerationEvents.onGenerateChestLootTable.fire { it({ lootTableId, builder -> exporter.accept(lootTableId, builder) }, registries) }
                 }
@@ -92,7 +92,7 @@ object MirageFairy2024FabricDataGenerator : DataGeneratorEntrypoint {
         }
         pack.addProvider { output: FabricDataOutput, registriesFuture: CompletableFuture<HolderLookup.Provider> ->
             val registries = registriesFuture.join()
-            object : SimpleFabricLootTableProvider(output, registriesFuture, LootContextTypes.ARCHAEOLOGY) {
+            object : SimpleFabricLootTableProvider(output, registriesFuture, LootContextParamSets.ARCHAEOLOGY) {
                 override fun generate(exporter: BiConsumer<ResourceKey<LootTable>, LootTable.Builder>) {
                     DataGenerationEvents.onGenerateArchaeologyLootTable.fire { it({ lootTableId, builder -> exporter.accept(lootTableId, builder) }, registries) }
                 }
@@ -100,7 +100,7 @@ object MirageFairy2024FabricDataGenerator : DataGeneratorEntrypoint {
         }
         pack.addProvider { output: FabricDataOutput, registriesFuture: CompletableFuture<HolderLookup.Provider> ->
             val registries = registriesFuture.join()
-            object : SimpleFabricLootTableProvider(output, registriesFuture, LootContextTypes.ENTITY) {
+            object : SimpleFabricLootTableProvider(output, registriesFuture, LootContextParamSets.ENTITY) {
                 override fun generate(exporter: BiConsumer<ResourceKey<LootTable>, LootTable.Builder>) {
                     DataGenerationEvents.onGenerateEntityLootTable.fire { it({ entityType, builder -> exporter.accept(entityType.defaultLootTable, builder) }, registries) }
                 }
@@ -108,7 +108,7 @@ object MirageFairy2024FabricDataGenerator : DataGeneratorEntrypoint {
         }
         pack.addProvider { output: FabricDataOutput, registriesFuture: CompletableFuture<HolderLookup.Provider> ->
             val registries = registriesFuture.join()
-            object : SimpleFabricLootTableProvider(output, registriesFuture, LootContextTypes.ADVANCEMENT_REWARD) {
+            object : SimpleFabricLootTableProvider(output, registriesFuture, LootContextParamSets.ADVANCEMENT_REWARD) {
                 override fun generate(exporter: BiConsumer<ResourceKey<LootTable>, LootTable.Builder>) {
                     DataGenerationEvents.onGenerateAdvancementRewardLootTable.fire { it({ lootTableId, builder -> exporter.accept(lootTableId, builder) }, registries) }
                 }
@@ -141,9 +141,9 @@ object MirageFairy2024FabricDataGenerator : DataGeneratorEntrypoint {
         }
         pack.addProvider { output: FabricDataOutput ->
             object : DataProvider {
-                private val pathResolver = output.createPathProvider(DataOutput.Target.RESOURCE_PACK, "nine_patch_textures")
+                private val pathResolver = output.createPathProvider(PackOutput.Target.RESOURCE_PACK, "nine_patch_textures")
                 override fun getName() = "Nine Patch Textures"
-                override fun run(writer: DataWriter): CompletableFuture<*> {
+                override fun run(writer: CachedOutput): CompletableFuture<*> {
                     val futures = mutableListOf<CompletableFuture<*>>()
                     DataGenerationEvents.onGenerateNinePatchTexture.fire {
                         it { identifier, card ->
@@ -168,7 +168,7 @@ object MirageFairy2024FabricDataGenerator : DataGeneratorEntrypoint {
             object : DataProvider {
                 private val destination = MirageFairy2024.identifier("sounds")
                 override fun getName() = "Sounds"
-                override fun run(writer: DataWriter): CompletableFuture<*> {
+                override fun run(writer: CachedOutput): CompletableFuture<*> {
 
                     val map = mutableMapOf<String, Pair<String?, List<ResourceLocation>>>()
                     DataGenerationEvents.onGenerateSound.fire {
@@ -178,7 +178,7 @@ object MirageFairy2024FabricDataGenerator : DataGeneratorEntrypoint {
                     }
                     if (map.isEmpty()) return CompletableFuture.allOf()
 
-                    val path = output.getOutputFolder(DataOutput.Target.RESOURCE_PACK).resolve(destination.namespace).resolve(destination.path + ".json")
+                    val path = output.getOutputFolder(PackOutput.Target.RESOURCE_PACK).resolve(destination.namespace).resolve(destination.path + ".json")
 
                     val jsonElement = map.map { (path, entry) ->
                         path to jsonObjectNotNull(
@@ -193,9 +193,9 @@ object MirageFairy2024FabricDataGenerator : DataGeneratorEntrypoint {
         }
         pack.addProvider { output: FabricDataOutput ->
             object : DataProvider {
-                private val pathResolver = output.createPathProvider(DataOutput.Target.RESOURCE_PACK, "particles")
+                private val pathResolver = output.createPathProvider(PackOutput.Target.RESOURCE_PACK, "particles")
                 override fun getName() = "Particles"
-                override fun run(writer: DataWriter): CompletableFuture<*> {
+                override fun run(writer: CachedOutput): CompletableFuture<*> {
 
                     val map = mutableMapOf<ResourceLocation, JsonElement>()
                     DataGenerationEvents.onGenerateParticles.fire {
@@ -231,9 +231,9 @@ object MirageFairy2024FabricDataGenerator : DataGeneratorEntrypoint {
     private fun neoForge(pack: FabricDataGenerator.Pack) {
         pack.addProvider { output: FabricDataOutput, registriesFuture: CompletableFuture<HolderLookup.Provider> ->
             object : DataProvider {
-                private val pathResolver = output.createPathProvider(DataOutput.Target.DATA_PACK, "data_maps")
+                private val pathResolver = output.createPathProvider(PackOutput.Target.DATA_PACK, "data_maps")
                 override fun getName() = "Data Maps"
-                override fun run(writer: DataWriter): CompletableFuture<*> {
+                override fun run(writer: CachedOutput): CompletableFuture<*> {
                     val registries = registriesFuture.join()
                     val registryMap = mutableMapOf<ResourceKey<out Registry<*>>, MutableMap<ResourceLocation, MutableMap<ResourceLocation, JsonElement>>>()
                     DataGenerationEvents.onGenerateDataMap.fire {
@@ -262,7 +262,7 @@ object MirageFairy2024FabricDataGenerator : DataGeneratorEntrypoint {
         }
     }
 
-    override fun buildRegistry(registryBuilder: RegistryBuilder) {
+    override fun buildRegistry(registryBuilder: RegistrySetBuilder) {
         DataGenerationEvents.onBuildRegistry.fire { it(registryBuilder) }
     }
 }

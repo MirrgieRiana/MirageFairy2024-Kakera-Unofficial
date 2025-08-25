@@ -53,10 +53,13 @@ import net.fabricmc.fabric.api.`object`.builder.v1.block.FabricBlockSettings
 import net.minecraft.core.BlockPos
 import net.minecraft.core.HolderLookup
 import net.minecraft.core.registries.BuiltInRegistries
+import net.minecraft.data.models.model.TextureSlot
 import net.minecraft.data.models.model.TexturedModel
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.network.chat.Component
 import net.minecraft.network.protocol.Packet
+import net.minecraft.network.protocol.game.ClientGamePacketListener
+import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.tags.BlockTags
 import net.minecraft.world.entity.LivingEntity
@@ -64,33 +67,30 @@ import net.minecraft.world.item.BlockItem
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.TooltipFlag
+import net.minecraft.world.level.BlockGetter
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.LevelReader
 import net.minecraft.world.level.block.Block
+import net.minecraft.world.level.block.EntityBlock
+import net.minecraft.world.level.block.HorizontalDirectionalBlock
 import net.minecraft.world.level.block.entity.BlockEntity
 import net.minecraft.world.level.block.entity.BlockEntityType
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.level.material.MapColor
 import net.minecraft.world.level.pathfinder.PathComputationType
 import net.minecraft.world.level.storage.loot.functions.CopyComponentsFunction
+import net.minecraft.world.level.storage.loot.providers.number.ConstantValue
+import net.minecraft.world.phys.shapes.CollisionContext
 import net.minecraft.world.phys.shapes.VoxelShape
-import net.minecraft.data.models.model.TextureSlot as TextureKey
-import net.minecraft.network.protocol.game.ClientGamePacketListener as ClientPlayPacketListener
-import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket as BlockEntityUpdateS2CPacket
-import net.minecraft.world.level.BlockGetter as BlockView
-import net.minecraft.world.level.block.EntityBlock as BlockEntityProvider
-import net.minecraft.world.level.block.HorizontalDirectionalBlock as HorizontalFacingBlock
-import net.minecraft.world.level.storage.loot.providers.number.ConstantValue as ConstantLootNumberProvider
-import net.minecraft.world.phys.shapes.CollisionContext as ShapeContext
 
 object FairyStatue {
     val itemGroupCard = ItemGroupCard(MirageFairy2024.identifier("fairy_statue"), "Fairy Statue", "妖精の像") {
         FairyStatueCard.FAIRY_STATUE.item().createItemStack().also { it.setFairyMotif(motifRegistry.entrySet().random().value) }
     }
     val descriptionTranslation = Translation({ "block.${MirageFairy2024.identifier("fairy_statue").toLanguageKey()}.description" }, "Fairy dream can be obtained", "妖精の夢を獲得可能")
-    val CASE: TextureKey = TextureKey.create("case")
-    val BASE: TextureKey = TextureKey.create("base")
-    val END: TextureKey = TextureKey.create("end")
+    val CASE: TextureSlot = TextureSlot.create("case")
+    val BASE: TextureSlot = TextureSlot.create("base")
+    val END: TextureSlot = TextureSlot.create("end")
 }
 
 class FairyStatueCard(
@@ -110,9 +110,9 @@ class FairyStatueCard(
         .poem(poem)
         .text(PoemType.DESCRIPTION, text { FairyStatue.descriptionTranslation() })
     val texturedModelFactory = TexturedModel.Provider {
-        val model = Model(MirageFairy2024.identifier("block/fairy_statue_template"), TextureKey.PARTICLE, FairyStatue.CASE, FairyStatue.BASE, FairyStatue.END)
+        val model = Model(MirageFairy2024.identifier("block/fairy_statue_template"), TextureSlot.PARTICLE, FairyStatue.CASE, FairyStatue.BASE, FairyStatue.END)
         model.with(
-            TextureKey.PARTICLE to "block/" * identifier * "_base",
+            TextureSlot.PARTICLE to "block/" * identifier * "_base",
             FairyStatue.CASE to "block/" * identifier * "_case",
             FairyStatue.BASE to "block/" * identifier * "_base",
             FairyStatue.END to "block/" * identifier * "_end",
@@ -169,7 +169,7 @@ fun initFairyStatue() {
         }
 
         // レンダリング
-        card.block.registerVariantsBlockStateGeneration { normal("block/" * card.block().getIdentifier()).withHorizontalRotation(HorizontalFacingBlock.FACING) }
+        card.block.registerVariantsBlockStateGeneration { normal("block/" * card.block().getIdentifier()).withHorizontalRotation(HorizontalDirectionalBlock.FACING) }
         card.block.registerModelGeneration(card.texturedModelFactory)
         card.block.registerCutoutRenderLayer()
         card.blockEntityType.registerRenderingProxyBlockEntityRendererFactory()
@@ -188,7 +188,7 @@ fun initFairyStatue() {
         card.block.registerLootTableGeneration { provider, _ ->
             LootTable(
                 LootPool(ItemLootPoolEntry(card.item())) {
-                    setRolls(ConstantLootNumberProvider.exactly(1.0F))
+                    setRolls(ConstantValue.exactly(1.0F))
                     apply(CopyComponentsFunction.copyComponents(CopyComponentsFunction.Source.BLOCK_ENTITY).include(FAIRY_MOTIF_DATA_COMPONENT_TYPE))
                     provider.applyExplosionCondition(card.item(), this)
                 },
@@ -200,7 +200,7 @@ fun initFairyStatue() {
 }
 
 
-class FairyStatueBlock(private val card: FairyStatueCard, settings: Properties) : SimpleHorizontalFacingBlock(settings), BlockEntityProvider, FairyDreamProviderBlock {
+class FairyStatueBlock(private val card: FairyStatueCard, settings: Properties) : SimpleHorizontalFacingBlock(settings), EntityBlock, FairyDreamProviderBlock {
     companion object {
         val CODEC: MapCodec<FairyStatueBlock> = RecordCodecBuilder.mapCodec { instance ->
             instance.group(
@@ -236,7 +236,7 @@ class FairyStatueBlock(private val card: FairyStatueCard, settings: Properties) 
     override fun isPathfindable(state: BlockState, pathComputationType: PathComputationType) = false
 
     @Suppress("OVERRIDE_DEPRECATION")
-    override fun getShape(state: BlockState, world: BlockView, pos: BlockPos, context: ShapeContext) = SHAPE
+    override fun getShape(state: BlockState, world: BlockGetter, pos: BlockPos, context: CollisionContext) = SHAPE
 
     override fun getCloneItemStack(world: LevelReader, pos: BlockPos, state: BlockState): ItemStack {
         return asItem().createItemStack().also { itemStack -> itemStack.setFairyMotif(world.getBlockEntity(pos).castOrNull<FairyStatueBlockEntity>()?.getMotif()) }
@@ -277,13 +277,13 @@ class FairyStatueBlockEntity(card: FairyStatueCard, pos: BlockPos, state: BlockS
     }
 
     override fun getUpdateTag(registries: HolderLookup.Provider): CompoundTag = saveWithoutMetadata(registries)
-    override fun getUpdatePacket(): Packet<ClientPlayPacketListener>? = BlockEntityUpdateS2CPacket.create(this)
+    override fun getUpdatePacket(): Packet<ClientGamePacketListener>? = ClientboundBlockEntityDataPacket.create(this)
 
 
     override fun render(renderingProxy: RenderingProxy, tickDelta: Float, light: Int, overlay: Int) {
         renderingProxy.stack {
             renderingProxy.translate(8.0 / 16.0, 5.5 / 16.0, 8.0 / 16.0)
-            renderingProxy.rotateY(-(blockState.getValue(HorizontalFacingBlock.FACING).get2DDataValue() * 90) / 180F * Math.PI.toFloat())
+            renderingProxy.rotateY(-(blockState.getValue(HorizontalDirectionalBlock.FACING).get2DDataValue() * 90) / 180F * Math.PI.toFloat())
             renderingProxy.renderItemStack(itemStackCache ?: INVALID_ITEM_STACK)
         }
     }

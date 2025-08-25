@@ -80,16 +80,16 @@ import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.tags.ItemTags
 import net.minecraft.tags.TagKey
+import net.minecraft.world.effect.MobEffectInstance
+import net.minecraft.world.effect.MobEffects
 import net.minecraft.world.entity.EntityType
+import net.minecraft.world.food.FoodProperties
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.Items
 import net.minecraft.world.level.block.Blocks
+import net.minecraft.world.level.storage.loot.BuiltInLootTables
 import java.math.BigInteger
 import kotlin.math.pow
-import net.minecraft.world.effect.MobEffectInstance as StatusEffectInstance
-import net.minecraft.world.effect.MobEffects as StatusEffects
-import net.minecraft.world.food.FoodProperties as FoodComponent
-import net.minecraft.world.level.storage.loot.BuiltInLootTables as LootTables
 
 class MaterialCard(
     path: String,
@@ -99,7 +99,7 @@ class MaterialCard(
     val fuelValue: Int? = null,
     val soulStreamContainable: Boolean = false,
     val fireResistant: Boolean = false,
-    val foodComponentCreator: (suspend () -> FoodComponent)? = null,
+    val foodComponentCreator: (suspend () -> FoodProperties)? = null,
     val recipeRemainder: Item? = null,
     val tags: List<TagKey<Item>>? = null,
     val ore: Ore? = null,
@@ -179,13 +179,13 @@ class MaterialCard(
                 )
             },
         ) {
-            item.registerChestLoot({ LootTables.SIMPLE_DUNGEON }, 0.1F, 3..5)
-            item.registerChestLoot({ LootTables.ABANDONED_MINESHAFT }, 0.1F, 3..5)
-            item.registerChestLoot({ LootTables.ANCIENT_CITY }, 0.2F, 3..5)
-            item.registerChestLoot({ LootTables.DESERT_PYRAMID }, 0.5F, 3..5)
-            item.registerChestLoot({ LootTables.VILLAGE_DESERT_HOUSE }, 0.1F, 3..5)
-            item.registerSinglePoolChestLoot({ LootTables.DESERT_PYRAMID_ARCHAEOLOGY }, 1)
-            item.registerSinglePoolChestLoot({ LootTables.DESERT_WELL_ARCHAEOLOGY }, 1)
+            item.registerChestLoot({ BuiltInLootTables.SIMPLE_DUNGEON }, 0.1F, 3..5)
+            item.registerChestLoot({ BuiltInLootTables.ABANDONED_MINESHAFT }, 0.1F, 3..5)
+            item.registerChestLoot({ BuiltInLootTables.ANCIENT_CITY }, 0.2F, 3..5)
+            item.registerChestLoot({ BuiltInLootTables.DESERT_PYRAMID }, 0.5F, 3..5)
+            item.registerChestLoot({ BuiltInLootTables.VILLAGE_DESERT_HOUSE }, 0.1F, 3..5)
+            item.registerSinglePoolChestLoot({ BuiltInLootTables.DESERT_PYRAMID_ARCHAEOLOGY }, 1)
+            item.registerSinglePoolChestLoot({ BuiltInLootTables.DESERT_WELL_ARCHAEOLOGY }, 1)
         }
 
         val NOISE: MaterialCard = !MaterialCard(
@@ -284,10 +284,10 @@ class MaterialCard(
             PoemList(4).poem("Beyond the end of the world", "祈りを形に、再生の蜜。"),
             soulStreamContainable = true, ore = Ore(Shape.GEM, Material.PHANTOM_DROP),
             foodComponentCreator = {
-                FoodComponent.Builder()
+                FoodProperties.Builder()
                     .nutrition(2)
                     .saturationModifier(0.3F)
-                    .effect(StatusEffectInstance(StatusEffects.REGENERATION, 20 * 60), 1.0F)
+                    .effect(MobEffectInstance(MobEffects.REGENERATION, 20 * 60), 1.0F)
                     .alwaysEdible()
                     .build()
             },
@@ -412,12 +412,12 @@ class MaterialCard(
                 .poem("Has analgesic and stimulant effects", "悪魔の囁きを喰らう。")
                 .description("Healing and rare nausea by eating", "食べると回復、まれに吐き気"),
             foodComponentCreator = {
-                FoodComponent.Builder()
+                FoodProperties.Builder()
                     .nutrition(1)
                     .saturationModifier(0.1F)
                     .fast()
-                    .effect(StatusEffectInstance(StatusEffects.REGENERATION, 20 * 3), 1.0F)
-                    .effect(StatusEffectInstance(StatusEffects.CONFUSION, 20 * 20), 0.01F)
+                    .effect(MobEffectInstance(MobEffects.REGENERATION, 20 * 3), 1.0F)
+                    .effect(MobEffectInstance(MobEffects.CONFUSION, 20 * 20), 0.01F)
                     .build()
             },
         ) {
@@ -500,12 +500,12 @@ class MaterialCard(
                 .description("Grants fire resistance when eaten", "食べると火炎耐性を付与"),
             fireResistant = true, fuelValue = 200,
             foodComponentCreator = {
-                FoodComponent.Builder()
+                FoodProperties.Builder()
                     .nutrition(1)
                     .saturationModifier(0.1F)
                     .fast()
                     .alwaysEdible()
-                    .effect(StatusEffectInstance(StatusEffects.FIRE_RESISTANCE, 20 * 5), 1.0F)
+                    .effect(MobEffectInstance(MobEffects.FIRE_RESISTANCE, 20 * 5), 1.0F)
                     .build()
             },
         ) {
@@ -537,12 +537,12 @@ class MaterialCard(
                 .description("Grants absorption when eaten", "食べると衝撃吸収を付与"),
             fireResistant = true, fuelValue = 200,
             foodComponentCreator = {
-                FoodComponent.Builder()
+                FoodProperties.Builder()
                     .nutrition(1)
                     .saturationModifier(0.1F)
                     .fast()
                     .alwaysEdible()
-                    .effect(StatusEffectInstance(StatusEffects.ABSORPTION, 20 * 120), 1.0F)
+                    .effect(MobEffectInstance(MobEffects.ABSORPTION, 20 * 120), 1.0F)
                     .build()
             },
             tags = listOf(ItemTags.PIGLIN_LOVED),
@@ -558,10 +558,10 @@ class MaterialCard(
                 .poem("Tales of latex that charm fairies.", "闇夜に響く、月鈴の詩。")
                 .description("Grants night vision when eaten", "食べると暗視を付与"),
             foodComponentCreator = {
-                FoodComponent.Builder()
+                FoodProperties.Builder()
                     .nutrition(2)
                     .saturationModifier(0.3F)
-                    .effect(StatusEffectInstance(StatusEffects.NIGHT_VISION, 20 * 30), 1.0F)
+                    .effect(MobEffectInstance(MobEffects.NIGHT_VISION, 20 * 30), 1.0F)
                     .alwaysEdible()
                     .build()
             },
@@ -584,10 +584,10 @@ class MaterialCard(
                 .description("Gain experience by eating", "食べると経験値を獲得"),
             fuelValue = 200,
             foodComponentCreator = {
-                FoodComponent.Builder()
+                FoodProperties.Builder()
                     .nutrition(1)
                     .saturationModifier(0.1F)
-                    .effect(StatusEffectInstance(experienceStatusEffect.awaitHolder(), 10), 1.0F)
+                    .effect(MobEffectInstance(experienceStatusEffect.awaitHolder(), 10), 1.0F)
                     .build()
             },
         ) {
@@ -952,11 +952,11 @@ class MaterialCard(
             null,
             fuelValue = 200 * 4, recipeRemainder = Items.GLASS_BOTTLE,
             foodComponentCreator = {
-                FoodComponent.Builder()
+                FoodProperties.Builder()
                     .nutrition(6)
                     .saturationModifier(0.1F)
-                    .effect(StatusEffectInstance(StatusEffects.DAMAGE_BOOST, 20 * 60, 1), 1.0F)
-                    .effect(StatusEffectInstance(StatusEffects.CONFUSION, 20 * 60), 0.1F)
+                    .effect(MobEffectInstance(MobEffects.DAMAGE_BOOST, 20 * 60, 1), 1.0F)
+                    .effect(MobEffectInstance(MobEffects.CONFUSION, 20 * 60), 0.1F)
                     .build()
             },
             creator = { DrinkItem(it) },
@@ -981,10 +981,10 @@ class MaterialCard(
             null,
             recipeRemainder = Items.GLASS_BOTTLE,
             foodComponentCreator = {
-                FoodComponent.Builder()
+                FoodProperties.Builder()
                     .nutrition(6)
                     .saturationModifier(0.1F)
-                    .effect(StatusEffectInstance(StatusEffects.DAMAGE_RESISTANCE, 20 * 60), 1.0F)
+                    .effect(MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 20 * 60), 1.0F)
                     .build()
             },
             creator = { DrinkItem(it) },
@@ -1008,10 +1008,10 @@ class MaterialCard(
             PoemList(2).poem("Fairies get high, humans get burned", "妖精はハイになり、人間は火傷する。"),
             fuelValue = 200 * 12, recipeRemainder = Items.GLASS_BOTTLE,
             foodComponentCreator = {
-                FoodComponent.Builder()
+                FoodProperties.Builder()
                     .nutrition(6)
                     .saturationModifier(0.1F)
-                    .effect(StatusEffectInstance(experienceStatusEffect.awaitHolder(), 10 * 8, 1), 1.0F)
+                    .effect(MobEffectInstance(experienceStatusEffect.awaitHolder(), 10 * 8, 1), 1.0F)
                     .build()
             },
             creator = { DrinkItem(it, flaming = 5) },
@@ -1036,11 +1036,11 @@ class MaterialCard(
             PoemList(2).poem("A dark flavour from the underworld.", "冥界へといざなう、暗黒の味。"),
             fuelValue = 200 * 12, recipeRemainder = Items.GLASS_BOTTLE,
             foodComponentCreator = {
-                FoodComponent.Builder()
+                FoodProperties.Builder()
                     .nutrition(6)
                     .saturationModifier(0.1F)
-                    .effect(StatusEffectInstance(StatusEffects.REGENERATION, 20 * 60), 1.0F)
-                    .effect(StatusEffectInstance(StatusEffects.BLINDNESS, 20 * 60), 0.1F)
+                    .effect(MobEffectInstance(MobEffects.REGENERATION, 20 * 60), 1.0F)
+                    .effect(MobEffectInstance(MobEffects.BLINDNESS, 20 * 60), 0.1F)
                     .build()
             },
             creator = { DrinkItem(it) },
@@ -1064,11 +1064,11 @@ class MaterialCard(
             null,
             recipeRemainder = Items.GLASS_BOTTLE,
             foodComponentCreator = {
-                FoodComponent.Builder()
+                FoodProperties.Builder()
                     .nutrition(1)
                     .saturationModifier(0.1F)
-                    .effect(StatusEffectInstance(StatusEffects.HARM, 1, 9), 1.0F)
-                    .effect(StatusEffectInstance(StatusEffects.WITHER, 20 * 60, 4), 1.0F)
+                    .effect(MobEffectInstance(MobEffects.HARM, 1, 9), 1.0F)
+                    .effect(MobEffectInstance(MobEffects.WITHER, 20 * 60, 4), 1.0F)
                     .build()
             },
             creator = { DrinkItem(it) },

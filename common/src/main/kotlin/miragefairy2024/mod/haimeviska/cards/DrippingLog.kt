@@ -33,9 +33,9 @@ import net.minecraft.world.item.enchantment.Enchantments
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.state.BlockBehaviour
 import net.minecraft.world.level.block.state.BlockState
+import net.minecraft.world.level.storage.loot.functions.ApplyBonusCount
+import net.minecraft.world.level.storage.loot.predicates.LootItemRandomChanceCondition
 import net.minecraft.world.phys.BlockHitResult
-import net.minecraft.world.level.storage.loot.functions.ApplyBonusCount as ApplyBonusLootFunction
-import net.minecraft.world.level.storage.loot.predicates.LootItemRandomChanceCondition as RandomChanceLootCondition
 
 class HaimeviskaDrippingLogBlockCard(configuration: HaimeviskaBlockConfiguration) : HaimeviskaHorizontalFacingLogBlockCard(configuration) {
     override suspend fun createBlock(properties: BlockBehaviour.Properties) = DrippingHaimeviskaLogBlock(properties)
@@ -53,15 +53,15 @@ class HaimeviskaDrippingLogBlockCard(configuration: HaimeviskaBlockConfiguration
                     `when`(provider.doesNotHaveSilkTouch())
                 },
                 LootPool(ItemLootPoolEntry(MaterialCard.HAIMEVISKA_SAP.item()) {
-                    apply(ApplyBonusLootFunction.addUniformBonusCount(registries[Registries.ENCHANTMENT, Enchantments.FORTUNE]))
+                    apply(ApplyBonusCount.addUniformBonusCount(registries[Registries.ENCHANTMENT, Enchantments.FORTUNE]))
                 }) {
                     `when`(provider.doesNotHaveSilkTouch())
                 },
                 LootPool(ItemLootPoolEntry(MaterialCard.HAIMEVISKA_ROSIN.item()) {
-                    apply(ApplyBonusLootFunction.addUniformBonusCount(registries[Registries.ENCHANTMENT, Enchantments.FORTUNE], 2))
+                    apply(ApplyBonusCount.addUniformBonusCount(registries[Registries.ENCHANTMENT, Enchantments.FORTUNE], 2))
                 }) {
                     `when`(provider.doesNotHaveSilkTouch())
-                    `when`(RandomChanceLootCondition.randomChance(0.01F))
+                    `when`(LootItemRandomChanceCondition.randomChance(0.01F))
                 },
             ) {
                 provider.applyExplosionDecay(block(), this)

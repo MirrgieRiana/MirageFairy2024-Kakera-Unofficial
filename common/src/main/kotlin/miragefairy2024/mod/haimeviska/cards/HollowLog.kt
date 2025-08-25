@@ -14,7 +14,7 @@ import miragefairy2024.util.registerLootTableGeneration
 import net.minecraft.core.registries.Registries
 import net.minecraft.world.item.enchantment.Enchantments
 import net.minecraft.world.level.block.state.BlockBehaviour
-import net.minecraft.world.level.storage.loot.functions.ApplyBonusCount as ApplyBonusLootFunction
+import net.minecraft.world.level.storage.loot.functions.ApplyBonusCount
 
 class HaimeviskaHollowLogBlockCard(configuration: HaimeviskaBlockConfiguration) : HaimeviskaHorizontalFacingLogBlockCard(configuration) {
     override suspend fun createBlock(properties: BlockBehaviour.Properties) = HollowHaimeviskaLogBlock(properties)
@@ -32,7 +32,7 @@ class HaimeviskaHollowLogBlockCard(configuration: HaimeviskaBlockConfiguration) 
                     `when`(provider.doesNotHaveSilkTouch())
                 },
                 LootPool(ItemLootPoolEntry(MaterialCard.FRACTAL_WISP.item()) {
-                    apply(ApplyBonusLootFunction.addUniformBonusCount(registries[Registries.ENCHANTMENT, Enchantments.FORTUNE]))
+                    apply(ApplyBonusCount.addUniformBonusCount(registries[Registries.ENCHANTMENT, Enchantments.FORTUNE]))
                 }) {
                     `when`(provider.doesNotHaveSilkTouch())
                 },

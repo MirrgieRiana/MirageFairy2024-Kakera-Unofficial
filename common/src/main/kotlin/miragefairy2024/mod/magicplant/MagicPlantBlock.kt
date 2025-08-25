@@ -13,6 +13,7 @@ import mirrg.kotlin.hydrogen.or
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
+import net.minecraft.server.level.ServerLevel
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.sounds.SoundSource
 import net.minecraft.util.RandomSource
@@ -21,26 +22,24 @@ import net.minecraft.world.entity.EntityType
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.player.Inventory
 import net.minecraft.world.entity.player.Player
+import net.minecraft.world.inventory.AbstractContainerMenu
+import net.minecraft.world.inventory.ContainerLevelAccess
 import net.minecraft.world.item.ItemStack
+import net.minecraft.world.level.BlockGetter
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.LevelReader
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.Blocks
+import net.minecraft.world.level.block.BonemealableBlock
+import net.minecraft.world.level.block.BushBlock
+import net.minecraft.world.level.block.EntityBlock
+import net.minecraft.world.level.block.SupportType
 import net.minecraft.world.level.block.state.BlockState
+import net.minecraft.world.level.storage.loot.LootParams
+import net.minecraft.world.level.storage.loot.parameters.LootContextParams
 import net.minecraft.world.phys.BlockHitResult
-import net.minecraft.server.level.ServerLevel as ServerWorld
-import net.minecraft.world.inventory.AbstractContainerMenu as ScreenHandler
-import net.minecraft.world.inventory.ContainerLevelAccess as ScreenHandlerContext
-import net.minecraft.world.level.BlockGetter as BlockView
-import net.minecraft.world.level.LevelReader as WorldView
-import net.minecraft.world.level.block.BonemealableBlock as Fertilizable
-import net.minecraft.world.level.block.BushBlock as PlantBlock
-import net.minecraft.world.level.block.EntityBlock as BlockEntityProvider
-import net.minecraft.world.level.block.SupportType as SideShapeType
-import net.minecraft.world.level.storage.loot.LootParams as LootContextParameterSet
-import net.minecraft.world.level.storage.loot.parameters.LootContextParams as LootContextParameters
 
-abstract class MagicPlantBlock(private val configuration: MagicPlantCard<*>, settings: Properties) : PlantBlock(settings), BlockEntityProvider, Fertilizable {
+abstract class MagicPlantBlock(private val configuration: MagicPlantCard<*>, settings: Properties) : BushBlock(settings), EntityBlock, BonemealableBlock {
 
     // Block Entity
 
@@ -56,7 +55,7 @@ abstract class MagicPlantBlock(private val configuration: MagicPlantCard<*>, set
 
     // Behaviour
 
-    override fun mayPlaceOn(floor: BlockState, world: BlockView, pos: BlockPos) = world.getBlockState(pos).isFaceSturdy(world, pos, Direction.UP, SideShapeType.CENTER) || floor.`is`(Blocks.FARMLAND)
+    override fun mayPlaceOn(floor: BlockState, world: BlockGetter, pos: BlockPos) = world.getBlockState(pos).isFaceSturdy(world, pos, Direction.UP, SupportType.CENTER) || floor.`is`(Blocks.FARMLAND)
 
 
     // Trait
@@ -97,7 +96,7 @@ abstract class MagicPlantBlock(private val configuration: MagicPlantCard<*>, set
     protected abstract fun getBlockStateAfterGrowth(blockState: BlockState, amount: Int): BlockState
 
     /** 時間経過や骨粉などによって呼び出される成長と自動収穫などのためのイベントを処理します。 */
-    protected open fun move(world: ServerWorld, blockPos: BlockPos, blockState: BlockState, speed: Double = 1.0, autoPick: Boolean = false) {
+    protected open fun move(world: ServerLevel, blockPos: BlockPos, blockState: BlockState, speed: Double = 1.0, autoPick: Boolean = false) {
         val blockEntity = world.getMagicPlantBlockEntity(blockPos)
         val traitStacks = blockEntity?.getTraitStacks() ?: return
         val mainTraitEffects = calculateTraitEffects(world, blockPos, blockEntity, traitStacks)
@@ -139,11 +138,11 @@ abstract class MagicPlantBlock(private val configuration: MagicPlantCard<*>, set
     final override fun isRandomlyTicking(state: BlockState) = true
 
     @Suppress("OVERRIDE_DEPRECATION")
-    final override fun randomTick(state: BlockState, world: ServerWorld, pos: BlockPos, random: RandomSource) = move(world, pos, state, autoPick = true)
+    final override fun randomTick(state: BlockState, world: ServerLevel, pos: BlockPos, random: RandomSource) = move(world, pos, state, autoPick = true)
 
-    final override fun isValidBonemealTarget(world: WorldView, pos: BlockPos, state: BlockState) = canGrow(state)
+    final override fun isValidBonemealTarget(world: LevelReader, pos: BlockPos, state: BlockState) = canGrow(state)
     final override fun isBonemealSuccess(world: Level, random: RandomSource, pos: BlockPos, state: BlockState) = true
-    final override fun performBonemeal(world: ServerWorld, random: RandomSource, pos: BlockPos, state: BlockState) = move(world, pos, state, speed = 10.0)
+    final override fun performBonemeal(world: ServerLevel, random: RandomSource, pos: BlockPos, state: BlockState) = move(world, pos, state, speed = 10.0)
 
 
     // Drop
@@ -212,7 +211,7 @@ abstract class MagicPlantBlock(private val configuration: MagicPlantCard<*>, set
 
     fun tryPick(world: Level, blockPos: BlockPos, player: Player?, tool: ItemStack?, dropExperience: Boolean, causingEvent: Boolean): Boolean {
         val result = canPick(world.getBlockState(blockPos))
-        if (result && world.isServer) pick(world as ServerWorld, blockPos, player, tool, dropExperience)
+        if (result && world.isServer) pick(world as ServerLevel, blockPos, player, tool, dropExperience)
         if (causingEvent) {
             if (tool != null) {
                 val toolItem = tool.item
@@ -225,7 +224,7 @@ abstract class MagicPlantBlock(private val configuration: MagicPlantCard<*>, set
     }
 
     /** 成長段階を消費して収穫物を得てエフェクトを出す収穫処理。 */
-    private fun pick(world: ServerWorld, blockPos: BlockPos, player: Player?, tool: ItemStack?, dropExperience: Boolean) {
+    private fun pick(world: ServerLevel, blockPos: BlockPos, player: Player?, tool: ItemStack?, dropExperience: Boolean) {
 
         // ドロップアイテムを計算
         val blockState = world.getBlockState(blockPos)
@@ -266,8 +265,8 @@ abstract class MagicPlantBlock(private val configuration: MagicPlantCard<*>, set
                     blockEntity.getTraitStacks() ?: TraitStacks.EMPTY
                 }
                 player.openMenu(object : ExtendedScreenHandlerFactory<Pair<TraitStacks, BlockPos>> {
-                    override fun createMenu(syncId: Int, playerInventory: Inventory, player: Player): ScreenHandler {
-                        return TraitListScreenHandler(syncId, playerInventory, ScreenHandlerContext.create(level, player.blockPosition()), traitStacks, pos)
+                    override fun createMenu(syncId: Int, playerInventory: Inventory, player: Player): AbstractContainerMenu {
+                        return TraitListScreenHandler(syncId, playerInventory, ContainerLevelAccess.create(level, player.blockPosition()), traitStacks, pos)
                     }
 
                     override fun getDisplayName() = text { traitListScreenTranslation() }
@@ -291,21 +290,21 @@ abstract class MagicPlantBlock(private val configuration: MagicPlantCard<*>, set
     /** 破損時、LootTableと同じところで収穫物を追加する。 */
     // 本来 LootTable を使ってすべて行う想定だが、他にドロップを自由に制御できる場所がないため苦肉の策でここでプログラムで生成する
     @Suppress("OVERRIDE_DEPRECATION")
-    final override fun getDrops(state: BlockState, builder: LootContextParameterSet.Builder): MutableList<ItemStack> {
+    final override fun getDrops(state: BlockState, builder: LootParams.Builder): MutableList<ItemStack> {
         val itemStacks = mutableListOf<ItemStack>()
         @Suppress("DEPRECATION")
         itemStacks += super.getDrops(state, builder)
         run {
             val world = builder.level ?: return@run
-            val blockPos = builder.getOptionalParameter(LootContextParameters.ORIGIN).or { return@run }.toBlockPos()
-            val blockState = builder.getOptionalParameter(LootContextParameters.BLOCK_STATE) ?: return@run
+            val blockPos = builder.getOptionalParameter(LootContextParams.ORIGIN).or { return@run }.toBlockPos()
+            val blockState = builder.getOptionalParameter(LootContextParams.BLOCK_STATE) ?: return@run
             val block = blockState.block
-            val blockEntity = builder.getOptionalParameter(LootContextParameters.BLOCK_ENTITY) as? MagicPlantBlockEntity ?: return@run
+            val blockEntity = builder.getOptionalParameter(LootContextParams.BLOCK_ENTITY) as? MagicPlantBlockEntity ?: return@run
             val traitStacks = blockEntity.getTraitStacks() ?: return@run
             val traitEffects = calculateTraitEffects(world, blockPos, blockEntity, traitStacks)
             val randomTraitChances = blockEntity.getRandomTraitChances()
-            val player = builder.getOptionalParameter(LootContextParameters.THIS_ENTITY) as? Player
-            val tool = builder.getOptionalParameter(LootContextParameters.TOOL)
+            val player = builder.getOptionalParameter(LootContextParams.THIS_ENTITY) as? Player
+            val tool = builder.getOptionalParameter(LootContextParams.TOOL)
 
             itemStacks += createSeed(traitStacks, isRare = blockEntity.isRare())
             itemStacks += getAdditionalDrops(world, blockPos, block, blockState, traitStacks, traitEffects, randomTraitChances, player, tool)
@@ -318,7 +317,7 @@ abstract class MagicPlantBlock(private val configuration: MagicPlantCard<*>, set
     @Suppress("OVERRIDE_DEPRECATION")
     final override fun onRemove(state: BlockState, world: Level, pos: BlockPos, newState: BlockState, moved: Boolean) {
         if (!state.`is`(newState.block)) run {
-            if (world !is ServerWorld) return@run
+            if (world !is ServerLevel) return@run
             if (!canPick(state)) return@run
             val blockEntity = world.getMagicPlantBlockEntity(pos)
             val traitStacks = blockEntity?.getTraitStacks() ?: return@run

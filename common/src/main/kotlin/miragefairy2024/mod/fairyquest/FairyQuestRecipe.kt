@@ -44,14 +44,14 @@ import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.Items
 import net.minecraft.world.item.crafting.Ingredient
 import net.minecraft.world.level.levelgen.GenerationStep
+import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext
+import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration
+import net.minecraft.world.level.storage.loot.BuiltInLootTables
 import net.minecraft.world.level.storage.loot.LootContext
 import net.minecraft.world.level.storage.loot.LootTable
-import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext as FeatureContext
-import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration as DefaultFeatureConfig
-import net.minecraft.world.level.storage.loot.BuiltInLootTables as LootTables
-import net.minecraft.world.level.storage.loot.functions.LootItemConditionalFunction as ConditionalLootFunction
-import net.minecraft.world.level.storage.loot.functions.LootItemFunctionType as LootFunctionType
-import net.minecraft.world.level.storage.loot.predicates.LootItemCondition as LootCondition
+import net.minecraft.world.level.storage.loot.functions.LootItemConditionalFunction
+import net.minecraft.world.level.storage.loot.functions.LootItemFunctionType
+import net.minecraft.world.level.storage.loot.predicates.LootItemCondition
 
 val fairyQuestRecipeRegistryKey: ResourceKey<Registry<FairyQuestRecipe>> = ResourceKey.createRegistryKey(MirageFairy2024.identifier("fairy_quest_recipe"))
 val fairyQuestRecipeRegistry: Registry<FairyQuestRecipe> = FabricRegistryBuilder.createSimple(fairyQuestRecipeRegistryKey).attribute(RegistryAttribute.SYNCED).buildAndRegister()
@@ -218,9 +218,9 @@ enum class FairyQuestRecipeCard(
     }
 }
 
-val SET_FAIRY_QUEST_RECIPE_LOOT_FUNCTION_TYPE = LootFunctionType(SetFairyQuestRecipeLootFunction.SERIALIZER)
+val SET_FAIRY_QUEST_RECIPE_LOOT_FUNCTION_TYPE = LootItemFunctionType(SetFairyQuestRecipeLootFunction.SERIALIZER)
 
-val FAIRY_QUEST_CARD_FEATURE = FairyQuestCardFeature(DefaultFeatureConfig.CODEC)
+val FAIRY_QUEST_CARD_FEATURE = FairyQuestCardFeature(NoneFeatureConfiguration.CODEC)
 
 context(ModContext)
 fun initFairyQuestRecipe() {
@@ -235,22 +235,22 @@ fun initFairyQuestRecipe() {
         // 村チェストドロップ
         run {
             val allVillageChests = listOf(
-                LootTables.VILLAGE_WEAPONSMITH,
-                LootTables.VILLAGE_TOOLSMITH,
-                LootTables.VILLAGE_ARMORER,
-                LootTables.VILLAGE_CARTOGRAPHER,
-                LootTables.VILLAGE_MASON,
-                LootTables.VILLAGE_SHEPHERD,
-                LootTables.VILLAGE_BUTCHER,
-                LootTables.VILLAGE_FLETCHER,
-                LootTables.VILLAGE_FISHER,
-                LootTables.VILLAGE_TANNERY,
-                LootTables.VILLAGE_TEMPLE,
-                LootTables.VILLAGE_DESERT_HOUSE,
-                LootTables.VILLAGE_PLAINS_HOUSE,
-                LootTables.VILLAGE_TAIGA_HOUSE,
-                LootTables.VILLAGE_SNOWY_HOUSE,
-                LootTables.VILLAGE_SAVANNA_HOUSE,
+                BuiltInLootTables.VILLAGE_WEAPONSMITH,
+                BuiltInLootTables.VILLAGE_TOOLSMITH,
+                BuiltInLootTables.VILLAGE_ARMORER,
+                BuiltInLootTables.VILLAGE_CARTOGRAPHER,
+                BuiltInLootTables.VILLAGE_MASON,
+                BuiltInLootTables.VILLAGE_SHEPHERD,
+                BuiltInLootTables.VILLAGE_BUTCHER,
+                BuiltInLootTables.VILLAGE_FLETCHER,
+                BuiltInLootTables.VILLAGE_FISHER,
+                BuiltInLootTables.VILLAGE_TANNERY,
+                BuiltInLootTables.VILLAGE_TEMPLE,
+                BuiltInLootTables.VILLAGE_DESERT_HOUSE,
+                BuiltInLootTables.VILLAGE_PLAINS_HOUSE,
+                BuiltInLootTables.VILLAGE_TAIGA_HOUSE,
+                BuiltInLootTables.VILLAGE_SNOWY_HOUSE,
+                BuiltInLootTables.VILLAGE_SAVANNA_HOUSE,
             )
 
             fun registerChestLoot(lootTableId: ResourceKey<LootTable>, chance: Float) {
@@ -280,7 +280,7 @@ fun initFairyQuestRecipe() {
 
     // 地形生成
     val configuredFeatureKey = registerDynamicGeneration(Registries.CONFIGURED_FEATURE, MirageFairy2024.identifier("fairy_quest_card")) {
-        FAIRY_QUEST_CARD_FEATURE with DefaultFeatureConfig.INSTANCE
+        FAIRY_QUEST_CARD_FEATURE with NoneFeatureConfiguration.INSTANCE
     }
     val placedFeatureKey = registerDynamicGeneration(Registries.PLACED_FEATURE, MirageFairy2024.identifier("fairy_quest_card")) {
         val placementModifiers = placementModifiers { per(256) + flower(square, surface) }
@@ -294,9 +294,9 @@ fun initFairyQuestRecipe() {
 
 }
 
-class FairyQuestCardFeature(codec: Codec<DefaultFeatureConfig>) : PlacedItemFeature<DefaultFeatureConfig>(codec) {
-    override fun getCount(context: FeatureContext<DefaultFeatureConfig>) = 2
-    override fun createItemStack(context: FeatureContext<DefaultFeatureConfig>): ItemStack? {
+class FairyQuestCardFeature(codec: Codec<NoneFeatureConfiguration>) : PlacedItemFeature<NoneFeatureConfiguration>(codec) {
+    override fun getCount(context: FeaturePlaceContext<NoneFeatureConfiguration>) = 2
+    override fun createItemStack(context: FeaturePlaceContext<NoneFeatureConfiguration>): ItemStack? {
 
         // レシピ抽選
         val table = mutableListOf<Chance<ResourceLocation>>()
@@ -313,7 +313,7 @@ class FairyQuestCardFeature(codec: Codec<DefaultFeatureConfig>) : PlacedItemFeat
     }
 }
 
-class SetFairyQuestRecipeLootFunction(conditions: List<LootCondition>, private val recipeId: ResourceLocation) : ConditionalLootFunction(conditions) {
+class SetFairyQuestRecipeLootFunction(conditions: List<LootItemCondition>, private val recipeId: ResourceLocation) : LootItemConditionalFunction(conditions) {
     companion object {
         val SERIALIZER: MapCodec<SetFairyQuestRecipeLootFunction> = RecordCodecBuilder.mapCodec { instance ->
             commonFields(instance)
