@@ -113,7 +113,7 @@ class SoulStreamScreen(handler: SoulStreamScreenHandler, playerInventory: Invent
 
     // キー入力で閉じる
     override fun keyPressed(keyCode: Int, scanCode: Int, modifiers: Int): Boolean {
-        if (soulStreamKey.matches(keyCode, scanCode)) {
+        if (soulStreamKeyMappingCard.keyMapping.matches(keyCode, scanCode)) {
             onClose()
             return true
         }

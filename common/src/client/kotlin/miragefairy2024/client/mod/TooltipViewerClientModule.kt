@@ -13,11 +13,11 @@ import io.wispforest.owo.ui.core.Surface
 import io.wispforest.owo.ui.core.VerticalAlignment
 import io.wispforest.owo.util.Observable
 import miragefairy2024.ModContext
+import miragefairy2024.client.util.KeyMappingCard
 import miragefairy2024.client.util.SlotType
 import miragefairy2024.client.util.horizontalSpace
 import miragefairy2024.client.util.verticalScroll
 import miragefairy2024.client.util.verticalSpace
-import miragefairy2024.mixin.client.api.inputEventsHandlers
 import miragefairy2024.mod.OPEN_TOOLTIP_VIEWER_KEY_TRANSLATION
 import miragefairy2024.mod.TOOLTIP_VIEWER_EXAMPLE_KEY_TRANSLATION
 import miragefairy2024.mod.TOOLTIP_VIEWER_KEY_TRANSLATION
@@ -25,23 +25,20 @@ import miragefairy2024.util.get
 import miragefairy2024.util.invoke
 import miragefairy2024.util.isNotEmpty
 import miragefairy2024.util.text
-import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper
 import net.minecraft.client.KeyMapping
 import net.minecraft.client.Minecraft
 
-lateinit var tooltipViewerKey: KeyMapping
+val tooltipViewerKeyMappingCard = KeyMappingCard(
+    OPEN_TOOLTIP_VIEWER_KEY_TRANSLATION.keyGetter(),
+    InputConstants.UNKNOWN.value,
+    KeyMapping.CATEGORY_INVENTORY,
+) {
+    Minecraft.getInstance().setScreen(TooltipViewerScreen())
+}
 
 context(ModContext)
 fun initTooltipViewerClientModule() {
-
-    tooltipViewerKey = KeyMapping(OPEN_TOOLTIP_VIEWER_KEY_TRANSLATION.keyGetter(), InputConstants.UNKNOWN.value, KeyMapping.CATEGORY_INVENTORY)
-    inputEventsHandlers += {
-        while (tooltipViewerKey.consumeClick()) {
-            Minecraft.getInstance().setScreen(TooltipViewerScreen())
-        }
-    }
-    KeyBindingHelper.registerKeyBinding(tooltipViewerKey)
-
+    tooltipViewerKeyMappingCard.init()
 }
 
 class TooltipViewerScreen() : BaseOwoScreen<FlowLayout>(text { TOOLTIP_VIEWER_KEY_TRANSLATION() }) {
@@ -143,7 +140,7 @@ class TooltipViewerScreen() : BaseOwoScreen<FlowLayout>(text { TOOLTIP_VIEWER_KE
             onClose()
             return true
         }
-        if (tooltipViewerKey.matches(keyCode, scanCode)) {
+        if (tooltipViewerKeyMappingCard.keyMapping.matches(keyCode, scanCode)) {
             onClose()
             return true
         }

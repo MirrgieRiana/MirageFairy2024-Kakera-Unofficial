@@ -10,6 +10,7 @@ import io.wispforest.owo.ui.core.Surface
 import io.wispforest.owo.ui.core.VerticalAlignment
 import miragefairy2024.MirageFairy2024
 import miragefairy2024.ModContext
+import miragefairy2024.client.util.KeyMappingCard
 import miragefairy2024.client.util.LimitedLabelComponent
 import miragefairy2024.client.util.createOwoToast
 import miragefairy2024.client.util.horizontalSpace
@@ -17,7 +18,6 @@ import miragefairy2024.client.util.registerClientPacketReceiver
 import miragefairy2024.client.util.registerHandledScreen
 import miragefairy2024.client.util.sendToServer
 import miragefairy2024.client.util.verticalSpace
-import miragefairy2024.mixin.client.api.inputEventsHandlers
 import miragefairy2024.mod.fairy.GAIN_FAIRY_DREAM_TRANSLATION
 import miragefairy2024.mod.fairy.GainFairyDreamChannel
 import miragefairy2024.mod.fairy.OPEN_SOUL_STREAM_KEY_TRANSLATION
@@ -30,7 +30,6 @@ import miragefairy2024.util.darkBlue
 import miragefairy2024.util.invoke
 import miragefairy2024.util.plus
 import miragefairy2024.util.text
-import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper
 import net.fabricmc.fabric.api.client.screen.v1.ScreenEvents
 import net.fabricmc.fabric.api.client.screen.v1.ScreenMouseEvents
 import net.minecraft.client.KeyMapping
@@ -41,7 +40,14 @@ import org.lwjgl.glfw.GLFW
 import net.minecraft.client.Minecraft as MinecraftClient
 import net.minecraft.client.gui.components.ImageButton as TexturedButtonWidget
 
-lateinit var soulStreamKey: KeyMapping
+val soulStreamKeyMappingCard = KeyMappingCard(
+    OPEN_SOUL_STREAM_KEY_TRANSLATION.keyGetter(),
+    GLFW.GLFW_KEY_K,
+    KeyMapping.CATEGORY_INVENTORY,
+) {
+    lastMousePositionInInventory = null
+    OpenSoulStreamChannel.sendToServer(Unit)
+}
 
 var lastMousePositionInInventory: Pair<Double, Double>? = null
 
@@ -71,14 +77,7 @@ fun initFairyClientModule() {
     }
 
     // ソウルストリームのキーバインド
-    soulStreamKey = KeyMapping(OPEN_SOUL_STREAM_KEY_TRANSLATION.keyGetter(), GLFW.GLFW_KEY_K, KeyMapping.CATEGORY_INVENTORY)
-    inputEventsHandlers += {
-        while (soulStreamKey.consumeClick()) {
-            lastMousePositionInInventory = null
-            OpenSoulStreamChannel.sendToServer(Unit)
-        }
-    }
-    KeyBindingHelper.registerKeyBinding(soulStreamKey)
+    soulStreamKeyMappingCard.init()
 
     // インベントリ画面にソウルストリームのボタンを設置
     ScreenEvents.AFTER_INIT.register { _, screen, _, _ ->
